@@ -51,23 +51,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <motion.div className="space-y-4" variants={staggerContainer} initial="initial" animate="animate">
             <motion.div variants={fadeInUp}>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
-                  <span className="text-white text-xl font-bold">📊</span>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
+                  <span className="text-white text-lg font-bold">📊</span>
                 </div>
-                <div>
-                  <h1 className="text-5xl font-black bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent">
-                    Oilseed Investment
-                  </h1>
-                  <p className="text-sm text-emerald-600 font-semibold tracking-widest uppercase">
-                    Elite Strategic Analysis Dashboard
-                  </p>
-                </div>
+                <h1 className="text-3xl font-black bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent">
+                  Oilseed Investment Analysis
+                </h1>
               </div>
             </motion.div>
-            <motion.p variants={fadeInUp} className="text-lg text-slate-600 font-medium">
-              Strategic comparison: Tanzania vs Kazakhstan for India edible oil export
-            </motion.p>
           </motion.div>
         </div>
       </motion.header>
