@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getRiskColor } from '@/lib/utils';
 
 interface Risk {
@@ -19,6 +19,21 @@ interface Risk {
 interface RiskData {
   risks: Risk[];
 }
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6 },
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
 
 export default function RiskHeatmap() {
   const [data, setData] = useState<RiskData | null>(null);
@@ -41,7 +56,9 @@ export default function RiskHeatmap() {
   if (loading) {
     return (
       <div className="w-full h-96 flex items-center justify-center">
-        <div className="text-gray-500">Loading risk data...</div>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">
+          ⚙️
+        </motion.div>
       </div>
     );
   }
@@ -74,177 +91,204 @@ export default function RiskHeatmap() {
   return (
     <div className="w-full space-y-8">
       {/* Risk Legend */}
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Risk Scale</h3>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="text-center p-4 bg-blue-100 rounded-lg">
-            <div className="text-2xl font-bold text-blue-700">1</div>
-            <div className="text-xs text-gray-600 mt-1">Low Risk</div>
-          </div>
-          <div className="text-center p-4 bg-yellow-100 rounded-lg">
-            <div className="text-2xl font-bold text-yellow-700">2</div>
-            <div className="text-xs text-gray-600 mt-1">Moderate</div>
-          </div>
-          <div className="text-center p-4 bg-orange-100 rounded-lg">
-            <div className="text-2xl font-bold text-orange-700">3</div>
-            <div className="text-xs text-gray-600 mt-1">Mod-High</div>
-          </div>
-          <div className="text-center p-4 bg-red-100 rounded-lg">
-            <div className="text-2xl font-bold text-red-700">4</div>
-            <div className="text-xs text-gray-600 mt-1">High</div>
-          </div>
-          <div className="text-center p-4 bg-red-200 rounded-lg">
-            <div className="text-2xl font-bold text-red-800">5</div>
-            <div className="text-xs text-gray-600 mt-1">Critical</div>
-          </div>
-        </div>
-      </div>
+      <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-2xl shadow-2xl p-8 border border-white/60">
+        <h3 className="text-2xl font-black bg-gradient-to-r from-red-700 to-orange-600 bg-clip-text text-transparent mb-6">Risk Scale</h3>
+        <motion.div className="grid grid-cols-2 md:grid-cols-5 gap-4" variants={staggerContainer} initial="initial" animate="animate">
+          {[
+            { level: 1, label: 'Low Risk', color: 'from-blue-100 to-blue-200', text: 'text-blue-700' },
+            { level: 2, label: 'Moderate', color: 'from-yellow-100 to-yellow-200', text: 'text-yellow-700' },
+            { level: 3, label: 'Mod-High', color: 'from-orange-100 to-orange-200', text: 'text-orange-700' },
+            { level: 4, label: 'High', color: 'from-red-100 to-red-200', text: 'text-red-700' },
+            { level: 5, label: 'Critical', color: 'from-red-200 to-red-300', text: 'text-red-800' },
+          ].map((item) => (
+            <motion.div key={item.level} variants={fadeInUp} whileHover={{ scale: 1.05 }} className={`text-center p-4 bg-gradient-to-br ${item.color} rounded-xl shadow-md border border-white/40`}>
+              <div className={`text-3xl font-black ${item.text} mb-2`}>{item.level}</div>
+              <div className="text-xs text-gray-700 font-semibold">{item.label}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
 
       {/* Risk Matrix Heatmap */}
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 overflow-x-auto">
-        <h3 className="text-lg font-bold text-gray-900 mb-6">Risk Assessment Matrix</h3>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-4 text-left font-bold text-gray-700 border border-gray-300 text-sm">Risk Factor</th>
-              <th className="p-4 text-center font-bold text-emerald-600 border border-gray-300 text-sm">
-                Tanzania Risk
-              </th>
-              <th className="p-4 text-center font-bold text-blue-600 border border-gray-300 text-sm">
-                Kazakhstan Risk
-              </th>
-              <th className="p-4 text-center font-bold text-gray-700 border border-gray-300 text-sm">Difference</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.risks.map((risk, idx) => (
-              <motion.tr
-                key={risk.id}
-                className={`border-b border-gray-300 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-gray-100 cursor-pointer transition-colors`}
-                onClick={() => setExpandedRisk(expandedRisk === risk.id ? null : risk.id)}
-              >
-                <td className="p-4 font-medium text-gray-700 border border-gray-300">
-                  <div className="flex items-start gap-2">
-                    <span className="text-lg mt-1">
-                      {expandedRisk === risk.id ? '▼' : '▶'}
-                    </span>
-                    <div>
-                      <div className="font-semibold">{risk.name}</div>
-                      <div className="text-xs text-gray-500 mt-1">{risk.probability} probability</div>
+      <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-2xl shadow-2xl p-8 border border-white/60 overflow-x-auto">
+        <h3 className="text-2xl font-black bg-gradient-to-r from-orange-700 to-red-600 bg-clip-text text-transparent mb-6">Risk Assessment Matrix</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-white/40 border-b border-white/60">
+                <th className="p-4 text-left font-bold text-slate-700 text-sm">Risk Factor</th>
+                <th className="p-4 text-center font-bold text-emerald-600 text-sm">
+                  Tanzania Risk
+                </th>
+                <th className="p-4 text-center font-bold text-blue-600 text-sm">
+                  Kazakhstan Risk
+                </th>
+                <th className="p-4 text-center font-bold text-slate-700 text-sm">Difference</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.risks.map((risk, idx) => (
+                <motion.tr
+                  key={risk.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className={`border-b border-white/40 hover:bg-white/20 cursor-pointer transition-all ${idx % 2 === 0 ? 'bg-white/20' : 'bg-white/10'}`}
+                  onClick={() => setExpandedRisk(expandedRisk === risk.id ? null : risk.id)}
+                >
+                  <td className="p-4 font-medium text-slate-700">
+                    <div className="flex items-start gap-2">
+                      <span className="text-lg mt-1">
+                        {expandedRisk === risk.id ? '▼' : '▶'}
+                      </span>
+                      <div>
+                        <div className="font-semibold">{risk.name}</div>
+                        <div className="text-xs text-gray-600 mt-1 font-medium">{risk.probability} probability</div>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td className="p-4 text-center border border-gray-300">
-                  <motion.div
-                    className={`inline-block px-4 py-2 rounded-lg font-bold w-16 ${getRiskText(risk.tanzania_risk_level)}`}
-                    style={{ backgroundColor: getRiskBg(risk.tanzania_risk_level) }}
-                  >
-                    {risk.tanzania_risk_level}
-                  </motion.div>
-                </td>
-                <td className="p-4 text-center border border-gray-300">
-                  <motion.div
-                    className={`inline-block px-4 py-2 rounded-lg font-bold w-16 ${getRiskText(risk.kazakhstan_risk_level)}`}
-                    style={{ backgroundColor: getRiskBg(risk.kazakhstan_risk_level) }}
-                  >
-                    {risk.kazakhstan_risk_level}
-                  </motion.div>
-                </td>
-                <td className="p-4 text-center border border-gray-300 font-bold">
-                  {risk.kazakhstan_risk_level > risk.tanzania_risk_level ? (
-                    <span className="text-emerald-600">Tanzania ↓</span>
-                  ) : risk.tanzania_risk_level > risk.kazakhstan_risk_level ? (
-                    <span className="text-blue-600">Kaz ↓</span>
-                  ) : (
-                    <span className="text-gray-500">Equal</span>
-                  )}
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  </td>
+                  <td className="p-4 text-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className={`inline-block px-4 py-2 rounded-lg font-bold w-16 backdrop-blur ${getRiskText(risk.tanzania_risk_level)}`}
+                      style={{ backgroundColor: getRiskBg(risk.tanzania_risk_level) }}
+                    >
+                      {risk.tanzania_risk_level}
+                    </motion.div>
+                  </td>
+                  <td className="p-4 text-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className={`inline-block px-4 py-2 rounded-lg font-bold w-16 backdrop-blur ${getRiskText(risk.kazakhstan_risk_level)}`}
+                      style={{ backgroundColor: getRiskBg(risk.kazakhstan_risk_level) }}
+                    >
+                      {risk.kazakhstan_risk_level}
+                    </motion.div>
+                  </td>
+                  <td className="p-4 text-center font-bold text-slate-700">
+                    {risk.kazakhstan_risk_level > risk.tanzania_risk_level ? (
+                      <span className="text-emerald-600 font-bold">Tanzania ↓</span>
+                    ) : risk.tanzania_risk_level > risk.kazakhstan_risk_level ? (
+                      <span className="text-blue-600 font-bold">Kaz ↓</span>
+                    ) : (
+                      <span className="text-gray-500">Equal</span>
+                    )}
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </motion.div>
 
       {/* Expanded Risk Details */}
-      {expandedRisk && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl shadow-lg p-6 border-l-4 border-amber-500"
-        >
+      <AnimatePresence>
+        {expandedRisk && (
+          <motion.div
+            key={expandedRisk}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="bg-gradient-to-r from-amber-50/80 via-orange-50/80 to-red-50/80 rounded-2xl shadow-2xl p-8 border border-amber-200/60 backdrop-blur-sm overflow-hidden"
+          >
           {data.risks.map((risk) => {
             if (risk.id !== expandedRisk) return null;
 
             return (
-              <div key={risk.id} className="space-y-6">
-                <div>
-                  <h4 className="text-2xl font-bold text-gray-900 mb-2">{risk.name}</h4>
-                  <p className="text-gray-700">{risk.description}</p>
-                </div>
+              <motion.div key={risk.id} className="space-y-6 relative z-10">
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                  <h4 className="text-3xl font-black bg-gradient-to-r from-orange-700 to-red-600 bg-clip-text text-transparent mb-3">{risk.name}</h4>
+                  <p className="text-gray-700 text-lg">{risk.description}</p>
+                </motion.div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <motion.div className="grid md:grid-cols-2 gap-6" variants={staggerContainer} initial="initial" animate="animate">
                   {/* Tanzania Impact */}
-                  <div className="bg-white rounded-lg p-4 border-l-4 border-emerald-500">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-emerald-600 font-bold text-lg">{risk.tanzania_risk_level}</span>
-                      <span className="text-sm text-emerald-600 font-semibold">Tanzania</span>
+                  <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-emerald-500 shadow-md">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-emerald-600 font-black text-2xl">{risk.tanzania_risk_level}</span>
+                      <span className="text-sm text-emerald-700 font-bold uppercase tracking-wide">Tanzania</span>
                     </div>
-                    <p className="text-sm text-gray-700 mb-3">
-                      <strong>Impact:</strong> {risk.tanzania_impact}
+                    <p className="text-sm text-gray-700">
+                      <strong className="text-emerald-700">Impact:</strong> {risk.tanzania_impact}
                     </p>
-                  </div>
+                  </motion.div>
 
                   {/* Kazakhstan Impact */}
-                  <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-blue-600 font-bold text-lg">{risk.kazakhstan_risk_level}</span>
-                      <span className="text-sm text-blue-600 font-semibold">Kazakhstan</span>
+                  <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-blue-500 shadow-md">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-blue-600 font-black text-2xl">{risk.kazakhstan_risk_level}</span>
+                      <span className="text-sm text-blue-700 font-bold uppercase tracking-wide">Kazakhstan</span>
                     </div>
-                    <p className="text-sm text-gray-700 mb-3">
-                      <strong>Impact:</strong> {risk.kazakhstan_impact}
+                    <p className="text-sm text-gray-700">
+                      <strong className="text-blue-700">Impact:</strong> {risk.kazakhstan_impact}
                     </p>
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
 
                 {/* Mitigation Strategy */}
-                <div className="bg-white rounded-lg p-4 border-l-4 border-green-500">
-                  <h5 className="font-bold text-gray-900 mb-2">🛡️ Mitigation Strategy</h5>
-                  <p className="text-sm text-gray-700">{risk.mitigation}</p>
-                </div>
-              </div>
+                <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-green-500 shadow-md">
+                  <h5 className="font-bold text-gray-900 mb-3 text-lg">🛡️ Mitigation Strategy</h5>
+                  <p className="text-sm text-gray-700 leading-relaxed">{risk.mitigation}</p>
+                </motion.div>
+              </motion.div>
             );
           })}
         </motion.div>
-      )}
+        )}
+      </AnimatePresence>
 
       {/* Risk Summary */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl p-6 border-2 border-emerald-200 shadow-lg">
-          <h4 className="text-lg font-bold text-emerald-900 mb-4">Tanzania: Moderate Overall Risk ✓</h4>
-          <ul className="space-y-2 text-sm text-gray-700">
-            <li>✓ Lower tariff risk (0% DFTP)</li>
-            <li>✓ Geographic/supply volatility manageable with buffer stock</li>
-            <li>✓ Export restrictions addressable through government engagement</li>
-            <li>⚠ Quality control requires farmer partnerships</li>
+      <motion.div className="grid md:grid-cols-2 gap-6" variants={staggerContainer} initial="initial" animate="animate">
+        <motion.div variants={fadeInUp} className="bg-gradient-to-br from-emerald-50/80 via-green-50/80 to-teal-50/80 rounded-2xl p-8 border border-emerald-200/60 backdrop-blur-sm shadow-xl overflow-hidden">
+          <h4 className="text-xl font-black bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent mb-4">Tanzania: Moderate Overall Risk ✓</h4>
+          <ul className="space-y-3 text-sm text-gray-700">
+            <li className="flex items-start gap-3">
+              <span className="text-emerald-500 font-bold text-lg">✓</span>
+              <span>Lower tariff risk (0% DFTP)</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-emerald-500 font-bold text-lg">✓</span>
+              <span>Geographic/supply volatility manageable with buffer stock</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-emerald-500 font-bold text-lg">✓</span>
+              <span>Export restrictions addressable through government engagement</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-amber-500 font-bold text-lg">⚠</span>
+              <span>Quality control requires farmer partnerships</span>
+            </li>
           </ul>
-          <p className="text-xs text-gray-600 mt-4 italic">
+          <p className="text-xs text-gray-700 mt-6 italic font-medium bg-white/40 backdrop-blur p-3 rounded-lg">
             All risks have clear mitigation strategies. Investment remains attractive.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 border-2 border-blue-200 shadow-lg">
-          <h4 className="text-lg font-bold text-blue-900 mb-4">Kazakhstan: Higher Tariff Risk ⚠</h4>
-          <ul className="space-y-2 text-sm text-gray-700">
-            <li>✓ Very low supply/weather risk</li>
-            <li>✓ Industrial-scale infrastructure proven</li>
-            <li>⚠ 35% tariff creates export disadvantage</li>
-            <li>⚠ Limited tariff reduction flexibility</li>
+        <motion.div variants={fadeInUp} className="bg-gradient-to-br from-blue-50/80 via-cyan-50/80 to-sky-50/80 rounded-2xl p-8 border border-blue-200/60 backdrop-blur-sm shadow-xl overflow-hidden">
+          <h4 className="text-xl font-black bg-gradient-to-r from-blue-700 to-cyan-600 bg-clip-text text-transparent mb-4">Kazakhstan: Higher Tariff Risk ⚠</h4>
+          <ul className="space-y-3 text-sm text-gray-700">
+            <li className="flex items-start gap-3">
+              <span className="text-green-500 font-bold text-lg">✓</span>
+              <span>Very low supply/weather risk</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-500 font-bold text-lg">✓</span>
+              <span>Industrial-scale infrastructure proven</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-amber-500 font-bold text-lg">⚠</span>
+              <span>35% tariff creates export disadvantage</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-amber-500 font-bold text-lg">⚠</span>
+              <span>Limited tariff reduction flexibility</span>
+            </li>
           </ul>
-          <p className="text-xs text-gray-600 mt-4 italic">
+          <p className="text-xs text-gray-700 mt-6 italic font-medium bg-white/40 backdrop-blur p-3 rounded-lg">
             Good for supply security, but lower margins and less attractive returns.
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

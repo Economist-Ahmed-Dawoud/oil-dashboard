@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Location {
   id: string;
@@ -38,6 +38,21 @@ interface SupplyChainData {
   locations: Location[];
   supply_flows: Flow[];
 }
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6 },
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
 
 // Custom icon factory
 const createCustomIcon = (color: string, icon: string) => {
@@ -88,7 +103,9 @@ export default function SupplyChainMap() {
   if (loading) {
     return (
       <div className="w-full h-96 flex items-center justify-center">
-        <div className="text-gray-500">Loading map data...</div>
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">
+          ⚙️
+        </motion.div>
       </div>
     );
   }
@@ -115,7 +132,7 @@ export default function SupplyChainMap() {
   return (
     <div className="w-full space-y-8">
       {/* Map Container */}
-      <div className="rounded-2xl shadow-2xl overflow-hidden border-2 border-gray-200">
+      <motion.div variants={fadeInUp} className="rounded-2xl shadow-2xl overflow-hidden border border-white/60 backdrop-blur-sm">
         <div style={{ height: '500px' }} className="w-full">
           <MapContainer
             center={[-2, 25]}
@@ -163,111 +180,105 @@ export default function SupplyChainMap() {
             ))}
           </MapContainer>
         </div>
-      </div>
+      </motion.div>
 
       {/* Legend */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">📍 Key Locations</h3>
-          <div className="space-y-3">
+      <motion.div className="grid md:grid-cols-2 gap-6" variants={staggerContainer} initial="initial" animate="animate">
+        <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-2xl shadow-2xl p-8 border border-white/60">
+          <h3 className="text-2xl font-black bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent mb-6">📍 Key Locations</h3>
+          <motion.div className="space-y-3" variants={staggerContainer} initial="initial" animate="animate">
             {data.locations.map((location) => (
-              <div key={location.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                <div className="text-2xl mt-1">{location.icon}</div>
+              <motion.div key={location.id} variants={fadeInUp} whileHover={{ x: 4 }} className="flex items-start gap-3 p-4 bg-white/40 backdrop-blur rounded-xl border border-white/60 shadow-sm hover:shadow-md transition-all">
+                <div className="text-3xl mt-1">{location.icon}</div>
                 <div className="flex-1">
-                  <div className="font-semibold text-gray-900">{location.name}</div>
-                  <div className="text-sm text-gray-600">{location.role}</div>
+                  <div className="font-semibold text-slate-900">{location.name}</div>
+                  <div className="text-sm text-gray-700 font-medium">{location.role}</div>
                   {location.type === 'processing_hub' && (
-                    <div className="text-xs text-emerald-600 font-semibold mt-1">
+                    <div className="text-xs text-emerald-600 font-bold mt-2">
                       Capacity: {location.capacity_tons_day} tons/day
                     </div>
                   )}
                   {location.type === 'supplier' && location.volume_mt && (
-                    <div className="text-xs text-blue-600 font-semibold mt-1">
+                    <div className="text-xs text-blue-600 font-bold mt-2">
                       Available: {(location.volume_mt / 1000).toFixed(1)}K MT/year
                     </div>
                   )}
                   {location.type === 'market' && location.demand_soybean_mt && location.demand_sunflower_mt && (
-                    <div className="text-xs text-orange-600 font-semibold mt-1">
+                    <div className="text-xs text-orange-600 font-bold mt-2">
                       Demand: {((location.demand_soybean_mt + location.demand_sunflower_mt) / 1000000).toFixed(1)}K MT/year
                     </div>
                   )}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">📦 Trade Agreements</h3>
-          <div className="space-y-3">
-            <div className="p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
-              <div className="font-semibold text-green-900">SADC (0% Tariff)</div>
-              <p className="text-sm text-gray-700 mt-1">
-                Zambia → Tanzania soybean imports duty-free
-              </p>
-            </div>
-            <div className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-              <div className="font-semibold text-blue-900">EAC (0% Tariff)</div>
-              <p className="text-sm text-gray-700 mt-1">
-                Uganda/Kenya → Tanzania sunflower imports duty-free
-              </p>
-            </div>
-            <div className="p-3 bg-emerald-50 rounded-lg border-l-4 border-emerald-500">
-              <div className="font-semibold text-emerald-900">DFTP (0% Tariff)</div>
-              <p className="text-sm text-gray-700 mt-1">
-                Tanzania → India oil exports receive 0% duty (Least Developed Country preference)
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+        <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-2xl shadow-2xl p-8 border border-white/60">
+          <h3 className="text-2xl font-black bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent mb-6">📦 Trade Agreements</h3>
+          <motion.div className="space-y-3" variants={staggerContainer} initial="initial" animate="animate">
+            {[
+              { color: 'from-green-100 to-green-200', border: 'border-green-500', title: 'SADC (0% Tariff)', desc: 'Zambia → Tanzania soybean imports duty-free' },
+              { color: 'from-blue-100 to-blue-200', border: 'border-blue-500', title: 'EAC (0% Tariff)', desc: 'Uganda/Kenya → Tanzania sunflower imports duty-free' },
+              { color: 'from-emerald-100 to-emerald-200', border: 'border-emerald-500', title: 'DFTP (0% Tariff)', desc: 'Tanzania → India oil exports receive 0% duty (Least Developed Country preference)' },
+            ].map((agreement, idx) => (
+              <motion.div key={idx} variants={fadeInUp} className={`p-4 bg-gradient-to-br ${agreement.color} rounded-xl border-l-4 ${agreement.border} shadow-sm hover:shadow-md transition-all`}>
+                <div className="font-bold text-slate-900">{agreement.title}</div>
+                <p className="text-sm text-gray-700 mt-2 leading-relaxed">{agreement.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
       {/* Supply Flows Detail */}
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-900 mb-6">📊 Supply Chain Flows</h3>
-        <div className="space-y-4">
-          {data.supply_flows.map((flow) => (
+      <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-2xl shadow-2xl p-8 border border-white/60">
+        <h3 className="text-2xl font-black bg-gradient-to-r from-blue-700 to-cyan-600 bg-clip-text text-transparent mb-6">📊 Supply Chain Flows</h3>
+        <motion.div className="space-y-4" variants={staggerContainer} initial="initial" animate="animate">
+          {data.supply_flows.map((flow, idx) => (
             <motion.div
               key={flow.id}
-              className={`p-4 rounded-lg border-l-4 cursor-pointer transition-all ${
+              variants={fadeInUp}
+              whileHover={{ y: -2 }}
+              className={`p-5 rounded-xl border-l-4 cursor-pointer transition-all backdrop-blur ${
                 selectedFlow === flow.id
-                  ? 'bg-blue-50 border-blue-500 shadow-md'
-                  : 'bg-gray-50 border-gray-300 hover:shadow-sm'
+                  ? 'bg-blue-100/60 border-blue-500 shadow-lg'
+                  : 'bg-white/40 border-white/60 hover:bg-white/50 hover:shadow-md'
               }`}
               onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
             >
-              <div className="grid md:grid-cols-3 gap-4 mb-2">
+              <div className="grid md:grid-cols-3 gap-4 mb-3">
                 <div>
-                  <div className="text-sm text-gray-600 font-semibold">FROM</div>
-                  <div className="font-bold text-gray-900">
+                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">FROM</div>
+                  <div className="font-bold text-slate-900 mt-1">
                     {data.locations.find((l) => l.id === flow.from)?.name}
                   </div>
                 </div>
                 <div className="flex items-center justify-center">
-                  <div className="text-2xl">→</div>
+                  <div className="text-2xl font-bold text-gray-400">→</div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-600 font-semibold">TO</div>
-                  <div className="font-bold text-gray-900">
+                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">TO</div>
+                  <div className="font-bold text-slate-900 mt-1">
                     {data.locations.find((l) => l.id === flow.to)?.name}
                   </div>
                 </div>
               </div>
 
               <div className="grid md:grid-cols-3 gap-4 mb-3">
-                <div className="bg-white rounded p-2">
-                  <div className="text-xs text-gray-600">Commodity</div>
-                  <div className="font-semibold text-gray-900 text-sm">{flow.commodity}</div>
+                <div className="bg-white/60 backdrop-blur rounded-lg p-3 border border-white/60">
+                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">Commodity</div>
+                  <div className="font-semibold text-slate-900 text-sm mt-1">{flow.commodity}</div>
                 </div>
-                <div className="bg-white rounded p-2">
-                  <div className="text-xs text-gray-600">Volume</div>
-                  <div className="font-semibold text-gray-900 text-sm">
+                <div className="bg-white/60 backdrop-blur rounded-lg p-3 border border-white/60">
+                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">Volume</div>
+                  <div className="font-semibold text-slate-900 text-sm mt-1">
                     {flow.annual_volume_tons ? `${(flow.annual_volume_tons / 1000).toFixed(0)}K tons` : `${flow.volume_percent_of_facility}% capacity`}
                   </div>
                 </div>
-                <div className="bg-white rounded p-2">
-                  <div className="text-xs text-gray-600">Trade Agreement</div>
-                  <div className="font-semibold text-emerald-600 text-sm">{flow.trade_agreement}</div>
+                <div className="bg-white/60 backdrop-blur rounded-lg p-3 border border-white/60">
+                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">Trade Agreement</div>
+                  <div className="font-bold text-emerald-600 text-sm mt-1">{flow.trade_agreement}</div>
                 </div>
               </div>
 
@@ -275,43 +286,67 @@ export default function SupplyChainMap() {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
-                  className="mt-4 pt-4 border-t border-gray-300 space-y-2"
+                  className="mt-4 pt-4 border-t border-white/40 space-y-2"
                 >
                   <div>
-                    <div className="text-sm text-gray-600 font-semibold">Route</div>
-                    <div className="text-gray-700">{flow.route}</div>
+                    <div className="text-sm text-gray-700 font-bold uppercase tracking-wide">Route</div>
+                    <div className="text-gray-700 mt-1">{flow.route}</div>
                   </div>
                 </motion.div>
               )}
             </motion.div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Supply Security Summary */}
-      <div className="bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl shadow-lg p-6 border-2 border-emerald-200">
-        <h3 className="text-lg font-bold text-emerald-900 mb-4">🎯 Supply Chain Advantages</h3>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <h4 className="font-semibold text-emerald-900 mb-3">Sunflower Supply (70% of facility)</h4>
-            <ul className="space-y-2 text-sm text-gray-700">
-              <li>✓ Tanzania domestic: 300-350K tons (primary)</li>
-              <li>✓ Uganda backup: 50-75K tons (EAC duty-free)</li>
-              <li>✓ Kenya backup: 25-50K tons (EAC duty-free)</li>
-              <li>✓ Cost: $350-400/ton (vs Russia $450-500/ton)</li>
+      <motion.div variants={fadeInUp} className="bg-gradient-to-r from-emerald-50/80 via-green-50/80 to-teal-50/80 rounded-2xl shadow-2xl p-8 border border-emerald-200/60 backdrop-blur-sm">
+        <h3 className="text-2xl font-black bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent mb-6">🎯 Supply Chain Advantages</h3>
+        <motion.div className="grid md:grid-cols-2 gap-6" variants={staggerContainer} initial="initial" animate="animate">
+          <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border border-emerald-200/60">
+            <h4 className="font-bold text-emerald-900 mb-4 text-lg">Sunflower Supply (70% of facility)</h4>
+            <ul className="space-y-3 text-sm text-gray-700">
+              <li className="flex items-start gap-3">
+                <span className="text-emerald-500 font-bold text-lg">✓</span>
+                <span>Tanzania domestic: 300-350K tons (primary)</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-emerald-500 font-bold text-lg">✓</span>
+                <span>Uganda backup: 50-75K tons (EAC duty-free)</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-emerald-500 font-bold text-lg">✓</span>
+                <span>Kenya backup: 25-50K tons (EAC duty-free)</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-emerald-500 font-bold text-lg">✓</span>
+                <span>Cost: $350-400/ton (vs Russia $450-500/ton)</span>
+              </li>
             </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold text-emerald-900 mb-3">Soybean Supply (30% of facility)</h4>
-            <ul className="space-y-2 text-sm text-gray-700">
-              <li>✓ Zambia primary: 1.15 MT available (SADC duty-free)</li>
-              <li>✓ Malawi backup: 475K tons available (SADC duty-free)</li>
-              <li>✓ Total available: 2.3+ MT (far exceeds need)</li>
-              <li>✓ Cost: $500-550/ton (vs Argentina $550-600/ton)</li>
+          </motion.div>
+          <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border border-emerald-200/60">
+            <h4 className="font-bold text-emerald-900 mb-4 text-lg">Soybean Supply (30% of facility)</h4>
+            <ul className="space-y-3 text-sm text-gray-700">
+              <li className="flex items-start gap-3">
+                <span className="text-emerald-500 font-bold text-lg">✓</span>
+                <span>Zambia primary: 1.15 MT available (SADC duty-free)</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-emerald-500 font-bold text-lg">✓</span>
+                <span>Malawi backup: 475K tons available (SADC duty-free)</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-emerald-500 font-bold text-lg">✓</span>
+                <span>Total available: 2.3+ MT (far exceeds need)</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-emerald-500 font-bold text-lg">✓</span>
+                <span>Cost: $500-550/ton (vs Argentina $550-600/ton)</span>
+              </li>
             </ul>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
