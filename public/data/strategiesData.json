@@ -1,0 +1,172 @@
+{
+  "strategies": [
+    {
+      "id": "tanzania",
+      "name": "Tanzania Focused",
+      "badge": "RECOMMENDED",
+      "badge_color": "green",
+      "location": "Dar es Salaam",
+      "region": "East Africa",
+      "color": "#10b981",
+      "products": {
+        "sunflower": 70,
+        "soybean": 30
+      },
+      "capacity": {
+        "tons_day": 30,
+        "annual_output_tons": 68000
+      },
+      "investment": {
+        "total_million": 2.35,
+        "plant_capex": 0.5,
+        "working_capital": 1.35,
+        "regulatory": 0.1,
+        "supply_chain": 0.2
+      },
+      "financial": {
+        "payback_years": 2.75,
+        "irr_5yr_percent": 24,
+        "ebitda_margin": 11,
+        "annual_revenue_million": 81.6
+      },
+      "tariff_and_logistics": {
+        "tariff_access": "0% DFTP",
+        "tariff_advantage": "Saves $420/ton vs 35% MFN",
+        "logistics_days": 14,
+        "logistics_cost_per_ton": 55,
+        "customs_efficiency": "Direct port access"
+      },
+      "competitive_advantages": [
+        "Tariff arbitrage: 0% vs 35% (saves $420/ton)",
+        "Direct port access: 14 days vs 25-30 days",
+        "Regional sourcing: Duty-free SADC/EAC",
+        "Lower capex: $400-600K vs $500-800K (Central Asia)"
+      ],
+      "supply_sources": {
+        "sunflower": {
+          "primary": "Tanzania (300-350K tons/year)",
+          "secondary": "Uganda/Kenya (EAC duty-free)",
+          "tariff": "0%",
+          "cost_per_ton": 375
+        },
+        "soybean": {
+          "primary": "Zambia (1.15 MT available)",
+          "secondary": "Malawi (growing production)",
+          "tariff": "0% (SADC)",
+          "cost_per_ton": 525
+        }
+      },
+      "risks": {
+        "tariff_increase": { "level": 2, "impact": "Manageable" },
+        "export_restrictions": { "level": 3, "impact": "Moderate" },
+        "supply_volatility": { "level": 3, "impact": "Moderate" },
+        "quality_issues": { "level": 3, "impact": "Moderate" },
+        "competition": { "level": 2, "impact": "Manageable" },
+        "fx_volatility": { "level": 2, "impact": "Low" }
+      }
+    },
+    {
+      "id": "kazakhstan",
+      "name": "Kazakhstan/Central Asia",
+      "badge": "ALTERNATIVE",
+      "badge_color": "blue",
+      "location": "East Kazakhstan",
+      "region": "Central Asia",
+      "color": "#3b82f6",
+      "products": {
+        "sunflower": 80,
+        "soybean": 20
+      },
+      "capacity": {
+        "tons_day": 45,
+        "annual_output_tons": 117500
+      },
+      "investment": {
+        "total_million": 2.9,
+        "plant_capex": 0.6,
+        "working_capital": 1.8,
+        "regulatory": 0.15,
+        "supply_chain": 0.35
+      },
+      "financial": {
+        "payback_years": 3.5,
+        "irr_5yr_percent": 16.5,
+        "ebitda_margin": 9,
+        "annual_revenue_million": 127
+      },
+      "tariff_and_logistics": {
+        "tariff_access": "35% MFN duty",
+        "tariff_disadvantage": "$420/ton penalty vs Tanzania",
+        "logistics_days": 28,
+        "logistics_cost_per_ton": 100,
+        "customs_efficiency": "Overland + sea (complex)"
+      },
+      "competitive_advantages": [
+        "Massive integrated regional supply (Russia + Kazakhstan)",
+        "EAEU duty-free framework (internal)",
+        "Lower operational complexity (existing industry)",
+        "Supply certainty and stability"
+      ],
+      "supply_sources": {
+        "sunflower": {
+          "primary": "Kazakhstan (1.83 MT) + Russia (16+ MT)",
+          "secondary": "Regional EAEU",
+          "tariff": "0% (within EAEU)",
+          "cost_per_ton": 400
+        },
+        "soybean": {
+          "primary": "Russia regional imports",
+          "secondary": "Kazakhstan growing production",
+          "tariff": "0% (within EAEU)",
+          "cost_per_ton": 520
+        }
+      },
+      "risks": {
+        "tariff_increase": { "level": 4, "impact": "Severe" },
+        "export_restrictions": { "level": 1, "impact": "Low" },
+        "supply_volatility": { "level": 1, "impact": "Low" },
+        "quality_issues": { "level": 1, "impact": "Low" },
+        "competition": { "level": 2, "impact": "Manageable" },
+        "fx_volatility": { "level": 2, "impact": "Low" }
+      }
+    }
+  ],
+  "comparison_key_factors": [
+    {
+      "factor": "Investment Required",
+      "tanzania": "$2.35M",
+      "kazakhstan": "$2.9M",
+      "winner": "Tanzania"
+    },
+    {
+      "factor": "Payback Period",
+      "tanzania": "2.75 years",
+      "kazakhstan": "3.5 years",
+      "winner": "Tanzania"
+    },
+    {
+      "factor": "5-Year IRR",
+      "tanzania": "24%",
+      "kazakhstan": "16.5%",
+      "winner": "Tanzania"
+    },
+    {
+      "factor": "Tariff Advantage",
+      "tanzania": "0% DFTP",
+      "kazakhstan": "35% MFN",
+      "winner": "Tanzania"
+    },
+    {
+      "factor": "Transit Time",
+      "tanzania": "14 days",
+      "kazakhstan": "28 days",
+      "winner": "Tanzania"
+    },
+    {
+      "factor": "Supply Certainty",
+      "tanzania": "Regional (SADC/EAC)",
+      "kazakhstan": "Integrated (EAEU)",
+      "winner": "Kazakhstan"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "india_total_imports": {
+    "volume_mt": 16,
+    "value_billion_usd": 18.3,
+    "self_sufficiency": "38-43%",
+    "import_dependency": "55-60%"
+  },
+  "oil_breakdown": [
+    {
+      "oil_type": "Soybean",
+      "imports_mt": 5.47,
+      "percentage": 34,
+      "status": "HIGH_DEMAND",
+      "growth_yoy": "36%",
+      "value_billion": 6.6,
+      "suppliers": [
+        { "country": "Argentina", "share": 53, "color": "#f59e0b" },
+        { "country": "Brazil", "share": 21, "color": "#10b981" },
+        { "country": "Nepal", "share": 14, "color": "#3b82f6" },
+        { "country": "Russia", "share": 6, "color": "#6366f1" }
+      ]
+    },
+    {
+      "oil_type": "Sunflower",
+      "imports_mt": 3.25,
+      "percentage": 21,
+      "status": "HIGH_DEMAND",
+      "import_dependency": "97%",
+      "value_billion": 3.9,
+      "suppliers": [
+        { "country": "Russia", "share": 57, "color": "#ef4444" },
+        { "country": "Ukraine", "share": 30, "color": "#0ea5e9" },
+        { "country": "Argentina", "share": 13, "color": "#f59e0b" }
+      ]
+    },
+    {
+      "oil_type": "Palm",
+      "imports_mt": 7.0,
+      "percentage": 44,
+      "status": "HIGH_DEMAND",
+      "suppliers": []
+    },
+    {
+      "oil_type": "Others",
+      "imports_mt": 0.3,
+      "percentage": 2,
+      "status": "NEGLIGIBLE",
+      "suppliers": []
+    }
+  ],
+  "market_insights": {
+    "largest_importer": "India",
+    "annual_opportunity": "$18.3 billion",
+    "primary_drivers": [
+      "Palm oil price increases push buyers to soft oils",
+      "Consumer preference shift away from palm oil",
+      "Brazil's biodiesel mandate reducing exports",
+      "Growing consumer demand (3-3.5% CAGR)"
+    ]
+  }
+}

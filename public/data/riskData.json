@@ -1,0 +1,82 @@
+{
+  "risks": [
+    {
+      "id": "tariff_increase",
+      "name": "India Tariff Increases",
+      "description": "India could raise DFTP to 10-15% or beyond",
+      "probability": "High",
+      "tanzania_risk_level": 2,
+      "kazakhstan_risk_level": 4,
+      "tanzania_impact": "Still viable; logistics advantage remains",
+      "kazakhstan_impact": "Severe; already uncompetitive at 35%",
+      "mitigation": "Model at 10-15% duty; maintain cost discipline; focus on non-price differentiation",
+      "historical_context": "India oscillates between 5.5% (Oct 2021) and 27.5% (Sept 2024)"
+    },
+    {
+      "id": "export_restrictions",
+      "name": "Tanzania Export Restrictions",
+      "description": "Tanzania may restrict oil exports for domestic food security",
+      "probability": "Moderate",
+      "tanzania_risk_level": 3,
+      "kazakhstan_risk_level": 1,
+      "tanzania_impact": "Moderate; limits export capacity",
+      "kazakhstan_impact": "Minimal; Central Asia prioritizes exports",
+      "mitigation": "Early government engagement; commit 15-20% of output to domestic market at fair price; negotiate written export permits (3-5 years)",
+      "historical_context": "Tanzania imports 290K MT oil/year, creates supply sensitivity"
+    },
+    {
+      "id": "supply_volatility",
+      "name": "Regional Supply Volatility",
+      "description": "Weather dependency, smallholder side-selling, seasonal concentration",
+      "probability": "High",
+      "tanzania_risk_level": 3,
+      "kazakhstan_risk_level": 1,
+      "tanzania_impact": "Moderate; requires buffer stock management",
+      "kazakhstan_impact": "Low; massive integrated supply",
+      "mitigation": "Multi-country sourcing (Zambia, Malawi, Uganda, Kenya); 6-month buffer stock (10-12M working capital); crop insurance partnerships; flexible production at 50-70% capacity during low season",
+      "buffer_stock_requirement": "85-95K tons soybean + 200-220K tons sunflower"
+    },
+    {
+      "id": "quality_inconsistency",
+      "name": "Smallholder Quality Inconsistency",
+      "description": "Variable post-harvest practices, aflatoxin contamination, farmer side-selling",
+      "probability": "High",
+      "tanzania_risk_level": 3,
+      "kazakhstan_risk_level": 1,
+      "tanzania_impact": "Moderate; manageable with proper protocols",
+      "kazakhstan_impact": "Low; industrial-scale supply",
+      "mitigation": "Contract through cooperatives (not individual farmers); farmer training programs; pre-delivery quality testing; input financing; price floor guarantees; provide drying equipment",
+      "quality_standards": "Max 12% moisture, <50 ppm aflatoxin, <10% foreign matter"
+    },
+    {
+      "id": "competition",
+      "name": "Large Competitor Price Competition",
+      "description": "Argentina (53% soybean share), Russia/Ukraine (55-60% sunflower share) could aggressively price-compete",
+      "probability": "Constant",
+      "tanzania_risk_level": 2,
+      "kazakhstan_risk_level": 3,
+      "tanzania_impact": "Low; can differentiate on non-price factors",
+      "kazakhstan_impact": "Moderate; already cost-disadvantaged",
+      "mitigation": "Differentiate on non-GMO, origin traceability, consistency; establish long-term contracts (3-5 years) with major refiners; ISO 9001 + FSSAI certification; emphasize supply security vs Black Sea risk",
+      "positioning": "Premium quality + stability vs commodity pricing"
+    },
+    {
+      "id": "fx_volatility",
+      "name": "Foreign Exchange Volatility",
+      "description": "Revenue in USD, operating costs in local currencies; potential 20% currency swings",
+      "probability": "Moderate",
+      "tanzania_risk_level": 2,
+      "kazakhstan_risk_level": 2,
+      "tanzania_impact": "Low-Moderate; manageable with natural hedges",
+      "kazakhstan_impact": "Low-Moderate; manageable with natural hedges",
+      "mitigation": "Natural hedge (USD revenue, local currency costs); price commodity inputs in USD; use forward contracts for large shipments; operational efficiency focus",
+      "natural_hedge": "Most costs are fixed/sunk; variable costs don't fluctuate symmetrically with currency"
+    }
+  ],
+  "risk_summary": {
+    "tanzania_weighted_risk": "Moderate (2.5 avg)",
+    "kazakhstan_weighted_risk": "Moderate-High (2.2 avg)",
+    "tanzania_recommendation": "All risks are manageable with proper planning and mitigation strategies",
+    "decision_implication": "Tanzania maintains advantage even when accounting for risk premium"
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "locations": [
+    {
+      "id": "zambia",
+      "name": "Zambia",
+      "lat": -13.1339,
+      "lng": 27.8493,
+      "type": "supplier",
+      "role": "Soybean Producer",
+      "color": "#10b981",
+      "icon": "🌾",
+      "commodity": "Soybean",
+      "volume_mt": 1150000,
+      "available_surplus_mt": 1150000,
+      "tariff_access": "0% SADC",
+      "transport_to_tanzania_days": "5-7 days",
+      "transport_distance_km": 600,
+      "description": "Africa's largest soybean exporter with 1.15 MT annual surplus"
+    },
+    {
+      "id": "malawi",
+      "name": "Malawi",
+      "lat": -13.2543,
+      "lng": 34.3015,
+      "type": "supplier",
+      "role": "Soybean Backup",
+      "color": "#059669",
+      "icon": "🌾",
+      "commodity": "Soybean",
+      "volume_mt": 475000,
+      "available_surplus_mt": 200000,
+      "growth_cagr": "11%",
+      "tariff_access": "0% SADC",
+      "transport_to_tanzania_days": "4-6 days",
+      "description": "Growing soybean producer, emerging alternative to Zambia"
+    },
+    {
+      "id": "tanzania",
+      "name": "Tanzania (Dar es Salaam)",
+      "lat": -6.8019,
+      "lng": 39.2806,
+      "type": "processing_hub",
+      "role": "Processing Facility",
+      "color": "#0284c7",
+      "icon": "🏭",
+      "capacity_tons_day": 30,
+      "annual_output_tons": 68000,
+      "sunflower_supply_mt": 350000,
+      "sunflower_cost_per_ton": 375,
+      "port_access": "Direct Ocean Access",
+      "description": "Processing facility location with direct Indian Ocean access",
+      "capabilities": [
+        "Crude oil extraction",
+        "Quality testing lab",
+        "Storage facilities",
+        "Export documentation"
+      ]
+    },
+    {
+      "id": "uganda",
+      "name": "Uganda",
+      "lat": 1.3521,
+      "lng": 32.2988,
+      "type": "supplier",
+      "role": "Sunflower Backup",
+      "color": "#059669",
+      "icon": "🌾",
+      "commodity": "Sunflower",
+      "volume_mt": 75000,
+      "tariff_access": "0% EAC",
+      "transport_to_tanzania_days": "2-4 days",
+      "description": "EAC member with duty-free access, backup sunflower source"
+    },
+    {
+      "id": "kenya",
+      "name": "Kenya",
+      "lat": -0.0236,
+      "lng": 37.9062,
+      "type": "supplier",
+      "role": "Sunflower Backup",
+      "color": "#059669",
+      "icon": "🌾",
+      "commodity": "Sunflower",
+      "volume_mt": 50000,
+      "tariff_access": "0% EAC",
+      "transport_to_tanzania_days": "3-5 days",
+      "description": "EAC member providing regional supply diversity"
+    },
+    {
+      "id": "india",
+      "name": "India",
+      "lat": 20.5937,
+      "lng": 78.9629,
+      "type": "market",
+      "role": "Primary Export Market",
+      "color": "#f59e0b",
+      "icon": "🎯",
+      "demand_soybean_mt": 5470000,
+      "demand_sunflower_mt": 3250000,
+      "total_demand_mt": 8720000,
+      "import_value_billion": 18.3,
+      "tariff_access": "0% DFTP (Tanzania)",
+      "transport_from_tanzania_days": 14,
+      "description": "World's largest edible oil importer with 16 MT annual imports",
+      "key_buyers": [
+        "Adani Wilmar",
+        "Cargill India",
+        "Ruchi Soya Industries"
+      ]
+    }
+  ],
+  "supply_flows": [
+    {
+      "id": "zambia_to_tanzania",
+      "from": "zambia",
+      "to": "tanzania",
+      "commodity": "Soybean",
+      "volume_percent_of_facility": 30,
+      "annual_volume_tons": 85000,
+      "route": "Road/Rail via SADC corridor",
+      "tariff": "0% (SADC member)",
+      "transport_days": 5,
+      "trade_agreement": "SADC duty-free framework",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "malawi_to_tanzania",
+      "from": "malawi",
+      "to": "tanzania",
+      "commodity": "Soybean (Backup)",
+      "volume_percent_of_facility": 5,
+      "annual_volume_tons": 10000,
+      "route": "Road via SADC corridor",
+      "tariff": "0%",
+      "transport_days": 4,
+      "trade_agreement": "SADC duty-free",
+      "color": "#06b6d4",
+      "notes": "Secondary source for supply security"
+    },
+    {
+      "id": "tanzania_internal_sunflower",
+      "from": "tanzania",
+      "to": "tanzania",
+      "commodity": "Sunflower",
+      "volume_percent_of_facility": 55,
+      "annual_volume_tons": 200000,
+      "route": "Internal collection from farmer cooperatives",
+      "tariff": "0% (internal)",
+      "transport_days": 0,
+      "description": "Primary sunflower sourced domestically from cooperatives",
+      "color": "#fbbf24"
+    },
+    {
+      "id": "uganda_to_tanzania",
+      "from": "uganda",
+      "to": "tanzania",
+      "commodity": "Sunflower (Backup)",
+      "volume_percent_of_facility": 10,
+      "annual_volume_tons": 40000,
+      "route": "Road/Rail via EAC corridor",
+      "tariff": "0% (EAC member)",
+      "transport_days": 3,
+      "trade_agreement": "EAC duty-free framework",
+      "color": "#f59e0b",
+      "seasonality": "Second-season supply (June-August low season)"
+    },
+    {
+      "id": "kenya_to_tanzania",
+      "from": "kenya",
+      "to": "tanzania",
+      "commodity": "Sunflower (Backup)",
+      "volume_percent_of_facility": 5,
+      "annual_volume_tons": 15000,
+      "route": "Road via EAC corridor",
+      "tariff": "0%",
+      "transport_days": 4,
+      "trade_agreement": "EAC duty-free",
+      "color": "#f97316",
+      "notes": "Tertiary backup for supply diversification"
+    },
+    {
+      "id": "tanzania_to_india_soybean_oil",
+      "from": "tanzania",
+      "to": "india",
+      "commodity": "Soybean Oil (Crude)",
+      "volume_percent_of_facility": 30,
+      "annual_volume_tons": 20000,
+      "route": "Sea: Dar es Salaam → Indian Ocean → India ports",
+      "tariff": "0% DFTP (Least Developed Country preference)",
+      "transport_days": 14,
+      "trade_agreement": "India's DFTP scheme",
+      "destination_ports": [
+        "Mumbai",
+        "Kandla",
+        "Paradip"
+      ],
+      "color": "#10b981",
+      "shipping_frequency": "Weekly container services available"
+    },
+    {
+      "id": "tanzania_to_india_sunflower_oil",
+      "from": "tanzania",
+      "to": "india",
+      "commodity": "Sunflower Oil (Crude)",
+      "volume_percent_of_facility": 70,
+      "annual_volume_tons": 50000,
+      "route": "Sea: Dar es Salaam → Indian Ocean → India ports",
+      "tariff": "0% DFTP",
+      "transport_days": 14,
+      "trade_agreement": "India's DFTP scheme",
+      "color": "#0284c7",
+      "competitive_advantage": "Faster than Argentina (14 vs 25-30 days), cheaper than Russia/Black Sea"
+    }
+  ],
+  "trade_agreements": [
+    {
+      "name": "SADC (Southern African Development Community)",
+      "members": ["Tanzania", "Zambia", "Malawi", "Zimbabwe", "South Africa", "Botswana"],
+      "benefit": "0% tariff on agricultural goods",
+      "relevance": "Enables duty-free soybean imports from Zambia/Malawi"
+    },
+    {
+      "name": "EAC (East African Community)",
+      "members": ["Tanzania", "Uganda", "Kenya", "Rwanda", "Burundi"],
+      "benefit": "0% tariff on agricultural goods",
+      "relevance": "Enables duty-free sunflower backup from Uganda/Kenya"
+    },
+    {
+      "name": "DFTP (Duty-Free Tariff Preference)",
+      "beneficiary": "Tanzania (Least Developed Country)",
+      "benefit": "0% tariff on exports to India",
+      "relevance": "Critical advantage: saves $420/ton on $1,200 oil vs 35% MFN standard rate"
+    }
+  ],
+  "key_metrics": {
+    "total_supply_availability_mt": 2325000,
+    "facility_requirement_mt": 285000,
+    "supply_cushion_percent": 714,
+    "critical_path_days": 14,
+    "trade_advantage_per_ton": 420,
+    "annual_tariff_savings_million": 30
+  }
+}
