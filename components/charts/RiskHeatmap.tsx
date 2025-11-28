@@ -182,6 +182,63 @@ export default function RiskHeatmap() {
           </table>
         </div>
 
+        {/* Desktop Expanded Risk Details - appears right after table */}
+        <AnimatePresence>
+          {expandedRisk && (
+            <motion.div
+              key={expandedRisk}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="hidden md:block mt-6 bg-gradient-to-r from-amber-50/80 via-orange-50/80 to-red-50/80 rounded-xl shadow-lg p-6 border border-amber-200/60 overflow-hidden"
+            >
+              {data.risks.map((risk) => {
+                if (risk.id !== expandedRisk) return null;
+
+                return (
+                  <motion.div key={risk.id} className="space-y-6 relative z-10">
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                      <h4 className="text-2xl font-black bg-gradient-to-r from-orange-700 to-red-600 bg-clip-text text-transparent mb-2">{risk.name}</h4>
+                      <p className="text-gray-700 text-base">{risk.description}</p>
+                    </motion.div>
+
+                    <motion.div className="grid md:grid-cols-2 gap-6" variants={staggerContainer} initial="initial" animate="animate">
+                      {/* Tanzania Impact */}
+                      <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-emerald-500 shadow-md">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-emerald-600 font-black text-2xl">{risk.tanzania_risk_level}</span>
+                          <span className="text-sm text-emerald-700 font-bold uppercase tracking-wide">Tanzania</span>
+                        </div>
+                        <p className="text-sm text-gray-700">
+                          <strong className="text-emerald-700">Impact:</strong> {risk.tanzania_impact}
+                        </p>
+                      </motion.div>
+
+                      {/* Kazakhstan Impact */}
+                      <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-blue-500 shadow-md">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-blue-600 font-black text-2xl">{risk.kazakhstan_risk_level}</span>
+                          <span className="text-sm text-blue-700 font-bold uppercase tracking-wide">Kazakhstan</span>
+                        </div>
+                        <p className="text-sm text-gray-700">
+                          <strong className="text-blue-700">Impact:</strong> {risk.kazakhstan_impact}
+                        </p>
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Mitigation Strategy */}
+                    <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-green-500 shadow-md">
+                      <h5 className="font-bold text-gray-900 mb-3 text-lg">🛡️ Mitigation Strategy</h5>
+                      <p className="text-sm text-gray-700 leading-relaxed">{risk.mitigation}</p>
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Mobile Accordion View */}
         <div className="md:hidden space-y-2 sm:space-y-3">
           {data.risks.map((risk, idx) => (
