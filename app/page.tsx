@@ -46,7 +46,7 @@ export default function Home() {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-xl"
+        className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-xl"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <motion.div className="space-y-4" variants={staggerContainer} initial="initial" animate="animate">
@@ -69,7 +69,7 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="bg-white/40 backdrop-blur-xl border-b border-white/20"
+        className="sticky top-0 z-50 bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-lg"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex overflow-x-auto gap-2 py-4 scrollbar-hide">
