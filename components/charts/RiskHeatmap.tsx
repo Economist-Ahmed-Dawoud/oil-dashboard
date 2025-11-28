@@ -109,10 +109,12 @@ export default function RiskHeatmap() {
         </motion.div>
       </motion.div>
 
-      {/* Risk Matrix Heatmap */}
-      <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-2xl shadow-2xl p-8 border border-white/60 overflow-x-auto">
-        <h3 className="text-2xl font-black bg-gradient-to-r from-orange-700 to-red-600 bg-clip-text text-transparent mb-6">Risk Assessment Matrix</h3>
-        <div className="overflow-x-auto">
+      {/* Risk Matrix Heatmap - Mobile-friendly accordion on small screens */}
+      <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-2xl shadow-2xl p-3 sm:p-4 md:p-8 border border-white/60 overflow-hidden">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-black bg-gradient-to-r from-orange-700 to-red-600 bg-clip-text text-transparent mb-4 sm:mb-6">Risk Assessment Matrix</h3>
+
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-white/40 border-b border-white/60">
@@ -179,63 +181,99 @@ export default function RiskHeatmap() {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Accordion View */}
+        <div className="md:hidden space-y-2 sm:space-y-3">
+          {data.risks.map((risk, idx) => (
+            <motion.div key={risk.id} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}>
+              {/* Accordion Header */}
+              <motion.button
+                onClick={() => setExpandedRisk(expandedRisk === risk.id ? null : risk.id)}
+                className="w-full text-left p-3 sm:p-4 bg-white/40 hover:bg-white/60 border border-white/60 rounded-lg sm:rounded-xl transition-all"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-start gap-2 flex-1 min-w-0">
+                    <motion.span
+                      animate={{ rotate: expandedRisk === risk.id ? 90 : 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-base sm:text-lg mt-0.5 flex-shrink-0"
+                    >
+                      ▶
+                    </motion.span>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-semibold text-slate-900 text-sm sm:text-base">{risk.name}</div>
+                      <div className="text-xs text-gray-600 font-medium">{risk.probability} probability</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 flex-shrink-0">
+                    <motion.div
+                      className={`px-2 py-1 rounded-md text-xs font-bold backdrop-blur ${getRiskText(risk.tanzania_risk_level)}`}
+                      style={{ backgroundColor: getRiskBg(risk.tanzania_risk_level) }}
+                    >
+                      {risk.tanzania_risk_level}
+                    </motion.div>
+                    <motion.div
+                      className={`px-2 py-1 rounded-md text-xs font-bold backdrop-blur ${getRiskText(risk.kazakhstan_risk_level)}`}
+                      style={{ backgroundColor: getRiskBg(risk.kazakhstan_risk_level) }}
+                    >
+                      {risk.kazakhstan_risk_level}
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.button>
+
+              {/* Accordion Content - appears right after the row */}
+              <AnimatePresence>
+                {expandedRisk === risk.id && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-gradient-to-r from-amber-50/80 via-orange-50/80 to-red-50/80 border border-amber-200/60 rounded-b-lg sm:rounded-b-xl shadow-md overflow-hidden"
+                  >
+                    <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
+                      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                        <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">{risk.description}</p>
+                      </motion.div>
+
+                      <motion.div className="grid grid-cols-1 gap-3 sm:gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}>
+                        {/* Tanzania Impact */}
+                        <motion.div className="bg-white/60 backdrop-blur rounded-lg p-3 sm:p-4 border-l-4 border-emerald-500">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-emerald-600 font-black text-lg">{risk.tanzania_risk_level}</span>
+                            <span className="text-xs text-emerald-700 font-bold uppercase tracking-wide">Tanzania</span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-gray-700">
+                            <strong className="text-emerald-700">Impact:</strong> {risk.tanzania_impact}
+                          </p>
+                        </motion.div>
+
+                        {/* Kazakhstan Impact */}
+                        <motion.div className="bg-white/60 backdrop-blur rounded-lg p-3 sm:p-4 border-l-4 border-blue-500">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-blue-600 font-black text-lg">{risk.kazakhstan_risk_level}</span>
+                            <span className="text-xs text-blue-700 font-bold uppercase tracking-wide">Kazakhstan</span>
+                          </div>
+                          <p className="text-xs sm:text-sm text-gray-700">
+                            <strong className="text-blue-700">Impact:</strong> {risk.kazakhstan_impact}
+                          </p>
+                        </motion.div>
+                      </motion.div>
+
+                      {/* Mitigation Strategy */}
+                      <motion.div className="bg-white/60 backdrop-blur rounded-lg p-3 sm:p-4 border-l-4 border-green-500" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+                        <h5 className="font-bold text-gray-900 mb-2 text-xs sm:text-sm">🛡️ Mitigation Strategy</h5>
+                        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">{risk.mitigation}</p>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
-
-      {/* Expanded Risk Details */}
-      <AnimatePresence>
-        {expandedRisk && (
-          <motion.div
-            key={expandedRisk}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="bg-gradient-to-r from-amber-50/80 via-orange-50/80 to-red-50/80 rounded-2xl shadow-2xl p-8 border border-amber-200/60 backdrop-blur-sm overflow-hidden"
-          >
-          {data.risks.map((risk) => {
-            if (risk.id !== expandedRisk) return null;
-
-            return (
-              <motion.div key={risk.id} className="space-y-6 relative z-10">
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-                  <h4 className="text-3xl font-black bg-gradient-to-r from-orange-700 to-red-600 bg-clip-text text-transparent mb-3">{risk.name}</h4>
-                  <p className="text-gray-700 text-lg">{risk.description}</p>
-                </motion.div>
-
-                <motion.div className="grid md:grid-cols-2 gap-6" variants={staggerContainer} initial="initial" animate="animate">
-                  {/* Tanzania Impact */}
-                  <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-emerald-500 shadow-md">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-emerald-600 font-black text-2xl">{risk.tanzania_risk_level}</span>
-                      <span className="text-sm text-emerald-700 font-bold uppercase tracking-wide">Tanzania</span>
-                    </div>
-                    <p className="text-sm text-gray-700">
-                      <strong className="text-emerald-700">Impact:</strong> {risk.tanzania_impact}
-                    </p>
-                  </motion.div>
-
-                  {/* Kazakhstan Impact */}
-                  <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-blue-500 shadow-md">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-blue-600 font-black text-2xl">{risk.kazakhstan_risk_level}</span>
-                      <span className="text-sm text-blue-700 font-bold uppercase tracking-wide">Kazakhstan</span>
-                    </div>
-                    <p className="text-sm text-gray-700">
-                      <strong className="text-blue-700">Impact:</strong> {risk.kazakhstan_impact}
-                    </p>
-                  </motion.div>
-                </motion.div>
-
-                {/* Mitigation Strategy */}
-                <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-xl p-6 border-l-4 border-green-500 shadow-md">
-                  <h5 className="font-bold text-gray-900 mb-3 text-lg">🛡️ Mitigation Strategy</h5>
-                  <p className="text-sm text-gray-700 leading-relaxed">{risk.mitigation}</p>
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Risk Summary */}
       <motion.div className="grid md:grid-cols-2 gap-6" variants={staggerContainer} initial="initial" animate="animate">
