@@ -48,15 +48,15 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-xl"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           <motion.div className="space-y-4" variants={staggerContainer} initial="initial" animate="animate">
             <motion.div variants={fadeInUp}>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center">
-                  <span className="text-white text-lg font-bold">📊</span>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center flex-shrink-0">
+                  <span className="text-white text-base sm:text-lg font-bold">📊</span>
                 </div>
-                <h1 className="text-3xl font-black bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent">
-                  Oilseed Investment Analysis
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent truncate">
+                  Oilseed Investment
                 </h1>
               </div>
             </motion.div>
@@ -71,8 +71,8 @@ export default function Home() {
         transition={{ delay: 0.3 }}
         className="sticky top-0 z-50 bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-lg"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex overflow-x-auto gap-2 py-4 scrollbar-hide">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+          <div className="flex overflow-x-auto gap-1 sm:gap-2 py-2 sm:py-4 scrollbar-hide">
             {sections.map((section, idx) => (
               <motion.button
                 key={section.id}
@@ -80,7 +80,7 @@ export default function Home() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.05 * idx }}
                 onClick={() => setActiveSection(section.id)}
-                className={`relative px-6 py-3 rounded-xl font-semibold whitespace-nowrap transition-all duration-300 ${
+                className={`relative px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold whitespace-nowrap text-sm sm:text-base transition-all duration-300 flex-shrink-0 ${
                   activeSection === section.id
                     ? 'text-white shadow-2xl'
                     : 'text-slate-700 hover:text-slate-900'
@@ -89,11 +89,12 @@ export default function Home() {
                 {activeSection === section.id && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-xl -z-10"
+                    className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-lg sm:rounded-xl -z-10"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
-                {section.icon} {section.label}
+                <span className="hidden sm:inline">{section.icon} {section.label}</span>
+                <span className="sm:hidden">{section.icon}</span>
               </motion.button>
             ))}
           </div>
@@ -101,7 +102,7 @@ export default function Home() {
       </motion.nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-10 lg:py-16">
         {/* Executive Summary */}
         {activeSection === 'overview' && (
           <motion.div
@@ -116,7 +117,7 @@ export default function Home() {
               variants={staggerContainer}
               initial="initial"
               animate="animate"
-              className="grid md:grid-cols-3 gap-6 mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8"
             >
               {[
                 {
@@ -147,7 +148,7 @@ export default function Home() {
                 <motion.div
                   key={idx}
                   variants={fadeInUp}
-                  className="group relative overflow-hidden rounded-2xl bg-white/60 backdrop-blur p-8 border border-white/40 hover:border-white/60 transition-all duration-300 hover:shadow-2xl"
+                  className="group relative overflow-hidden rounded-xl sm:rounded-2xl bg-white/60 backdrop-blur p-4 sm:p-6 lg:p-8 border border-white/40 hover:border-white/60 transition-all duration-300 hover:shadow-2xl"
                 >
                   {/* Gradient background on hover */}
                   <motion.div
@@ -155,16 +156,16 @@ export default function Home() {
                   />
 
                   {/* Icon */}
-                  <div className="text-4xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                  <div className="text-3xl sm:text-4xl mb-2 sm:mb-4 transform group-hover:scale-110 transition-transform duration-300">
                     {card.icon}
                   </div>
 
                   {/* Content */}
-                  <p className="text-xs font-bold text-slate-600 tracking-widest uppercase mb-2">
+                  <p className="text-xs font-bold text-slate-600 tracking-widest uppercase mb-1 sm:mb-2">
                     {card.label}
                   </p>
-                  <h3 className={`text-3xl font-black mb-2 ${card.textColor}`}>{card.value}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{card.desc}</p>
+                  <h3 className={`text-xl sm:text-2xl lg:text-3xl font-black mb-1 sm:mb-2 ${card.textColor}`}>{card.value}</h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{card.desc}</p>
 
                   {/* Accent line */}
                   <div className={`absolute bottom-0 left-0 h-1 w-0 group-hover:w-full bg-gradient-to-r ${card.color} transition-all duration-500`} />
@@ -412,28 +413,28 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="bg-gradient-to-r from-slate-900 via-emerald-900 to-blue-900 text-white mt-24 border-t border-white/10"
+        className="bg-gradient-to-r from-slate-900 via-emerald-900 to-blue-900 text-white mt-12 sm:mt-16 lg:mt-24 border-t border-white/10"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16">
           <motion.div
             variants={staggerContainer}
             initial="initial"
             animate="animate"
-            className="grid md:grid-cols-3 gap-12 mb-12"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 mb-8 sm:mb-12"
           >
             <motion.div variants={fadeInUp}>
-              <h4 className="text-lg font-black mb-4 bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
+              <h4 className="text-base sm:text-lg font-black mb-3 sm:mb-4 bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
                 About This Analysis
               </h4>
-              <p className="text-slate-300 leading-relaxed text-sm">
+              <p className="text-slate-300 leading-relaxed text-xs sm:text-sm">
                 Comprehensive investment strategy for oilseed processing and export to India. Based on market data, tariff analysis, and supply chain logistics.
               </p>
             </motion.div>
             <motion.div variants={fadeInUp}>
-              <h4 className="text-lg font-black mb-4 bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
+              <h4 className="text-base sm:text-lg font-black mb-3 sm:mb-4 bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
                 Key Markets
               </h4>
-              <ul className="space-y-3 text-sm text-slate-300">
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-300">
                 <li className="flex items-center gap-2 hover:text-emerald-400 transition-colors">
                   <span>🇮🇳</span> India (Primary Market)
                 </li>
@@ -449,10 +450,10 @@ export default function Home() {
               </ul>
             </motion.div>
             <motion.div variants={fadeInUp}>
-              <h4 className="text-lg font-black mb-4 bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
+              <h4 className="text-base sm:text-lg font-black mb-3 sm:mb-4 bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
                 Investment Metrics
               </h4>
-              <ul className="space-y-3 text-sm text-slate-300">
+              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-300">
                 <li className="flex items-center gap-2">
                   <span>💰</span> <span className="font-semibold">$2.35M</span> Investment
                 </li>
@@ -469,12 +470,12 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          <div className="border-t border-white/10 pt-8 text-center">
+          <div className="border-t border-white/10 pt-6 sm:pt-8 text-center">
             <motion.p
               variants={fadeInUp}
-              className="text-sm text-slate-400 font-medium tracking-widest uppercase"
+              className="text-xs sm:text-sm text-slate-400 font-medium tracking-widest uppercase"
             >
-              © 2025 Elite Investment Analysis Dashboard | Powered by Advanced Analytics
+              © 2025 Elite Investment Analysis Dashboard | Advanced Analytics
             </motion.p>
           </div>
         </div>
