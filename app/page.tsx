@@ -9,17 +9,21 @@ import dynamic from 'next/dynamic';
 
 const SupplyChainMap = dynamic(() => import('@/components/maps/SupplyChainMap'), { ssr: false });
 
+/* Mobile-first animation variants with responsive durations */
 const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] },
+  transition: {
+    duration: 0.3,
+    ease: [0.43, 0.13, 0.23, 0.96]
+  },
 };
 
 const staggerContainer = {
   animate: {
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
+      staggerChildren: 0.05,
+      delayChildren: 0.1,
     },
   },
 };
@@ -33,11 +37,11 @@ export default function Home() {
   }, []);
 
   const sections = [
-    { id: 'overview', label: 'Executive Summary', icon: '📊' },
-    { id: 'market', label: 'Market Analysis', icon: '📈' },
-    { id: 'strategies', label: 'Strategies', icon: '🎯' },
-    { id: 'supply', label: 'Supply Chain', icon: '🗺️' },
-    { id: 'risks', label: 'Risk Assessment', icon: '⚠️' },
+    { id: 'overview', label: 'Executive Summary', abbreviation: 'Summary', icon: '📊' },
+    { id: 'market', label: 'Market Analysis', abbreviation: 'Market', icon: '📈' },
+    { id: 'strategies', label: 'Strategies', abbreviation: 'Strategy', icon: '🎯' },
+    { id: 'supply', label: 'Supply Chain', abbreviation: 'Supply', icon: '🗺️' },
+    { id: 'risks', label: 'Risk Assessment', abbreviation: 'Risks', icon: '⚠️' },
   ];
 
   return (
@@ -48,14 +52,14 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/80 backdrop-blur-xl border-b border-white/20 shadow-xl"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-5 lg:py-6">
           <motion.div className="space-y-4" variants={staggerContainer} initial="initial" animate="animate">
             <motion.div variants={fadeInUp}>
               <div className="flex items-center gap-2 sm:gap-3">
                 <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-base sm:text-lg font-bold">📊</span>
                 </div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent truncate">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-600 bg-clip-text text-transparent truncate">
                   Oilseed Investment
                 </h1>
               </div>
@@ -71,8 +75,8 @@ export default function Home() {
         transition={{ delay: 0.3 }}
         className="sticky top-0 z-50 bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-lg"
       >
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-          <div className="flex overflow-x-auto gap-1 sm:gap-2 py-2 sm:py-4 scrollbar-hide">
+        <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-8">
+          <div className="flex overflow-x-auto gap-1.5 sm:gap-2 py-2 sm:py-3 px-3 sm:px-0 scrollbar-hide scroll-smooth">
             {sections.map((section, idx) => (
               <motion.button
                 key={section.id}
@@ -80,7 +84,7 @@ export default function Home() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.05 * idx }}
                 onClick={() => setActiveSection(section.id)}
-                className={`relative px-3 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold whitespace-nowrap text-sm sm:text-base transition-all duration-300 flex-shrink-0 ${
+                className={`relative px-3 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold whitespace-nowrap text-xs sm:text-sm md:text-base min-h-[44px] flex items-center justify-center transition-all duration-200 flex-shrink-0 touch-target ${
                   activeSection === section.id
                     ? 'text-white shadow-2xl'
                     : 'text-slate-700 hover:text-slate-900'
@@ -93,8 +97,11 @@ export default function Home() {
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
+                {/* Mobile: abbreviation, Tablet+: full label */}
                 <span className="hidden sm:inline">{section.icon} {section.label}</span>
-                <span className="sm:hidden">{section.icon}</span>
+                <span className="sm:hidden flex items-center gap-1">
+                  {section.icon} <span className="text-xs font-bold">{section.abbreviation}</span>
+                </span>
               </motion.button>
             ))}
           </div>
@@ -102,7 +109,7 @@ export default function Home() {
       </motion.nav>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-10 lg:py-16">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 lg:py-10">
         {/* Executive Summary */}
         {activeSection === 'overview' && (
           <motion.div
@@ -110,14 +117,14 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="space-y-8"
+            className="space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10"
           >
             {/* Hero Cards */}
             <motion.div
               variants={staggerContainer}
               initial="initial"
               animate="animate"
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 md:gap-4 lg:gap-6 mb-4 sm:mb-6 md:mb-8"
             >
               {[
                 {
@@ -148,7 +155,7 @@ export default function Home() {
                 <motion.div
                   key={idx}
                   variants={fadeInUp}
-                  className="group relative overflow-hidden rounded-xl sm:rounded-2xl bg-white/60 backdrop-blur p-4 sm:p-6 lg:p-8 border border-white/40 hover:border-white/60 transition-all duration-300 hover:shadow-2xl"
+                  className="group relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl bg-white/60 backdrop-blur p-3 sm:p-4 md:p-6 lg:p-8 border border-white/40 hover:border-white/60 transition-all duration-300 hover:shadow-2xl"
                 >
                   {/* Gradient background on hover */}
                   <motion.div
@@ -156,7 +163,7 @@ export default function Home() {
                   />
 
                   {/* Icon */}
-                  <div className="text-3xl sm:text-4xl mb-2 sm:mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                  <div className="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3 md:mb-4 transform group-hover:scale-110 transition-transform duration-300">
                     {card.icon}
                   </div>
 
@@ -164,7 +171,7 @@ export default function Home() {
                   <p className="text-xs font-bold text-slate-600 tracking-widest uppercase mb-1 sm:mb-2">
                     {card.label}
                   </p>
-                  <h3 className={`text-xl sm:text-2xl lg:text-3xl font-black mb-1 sm:mb-2 ${card.textColor}`}>{card.value}</h3>
+                  <h3 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-black mb-1 sm:mb-2 md:mb-3 ${card.textColor}`}>{card.value}</h3>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{card.desc}</p>
 
                   {/* Accent line */}
@@ -413,14 +420,14 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="bg-gradient-to-r from-slate-900 via-emerald-900 to-blue-900 text-white mt-12 sm:mt-16 lg:mt-24 border-t border-white/10"
+        className="bg-gradient-to-r from-slate-900 via-emerald-900 to-blue-900 text-white mt-8 sm:mt-12 md:mt-16 lg:mt-24 border-t border-white/10"
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8 md:py-12 lg:py-16">
           <motion.div
             variants={staggerContainer}
             initial="initial"
             animate="animate"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 mb-8 sm:mb-12"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-12 mb-6 sm:mb-8 md:mb-12"
           >
             <motion.div variants={fadeInUp}>
               <h4 className="text-base sm:text-lg font-black mb-3 sm:mb-4 bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
@@ -470,7 +477,7 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          <div className="border-t border-white/10 pt-6 sm:pt-8 text-center">
+          <div className="border-t border-white/10 pt-4 sm:pt-6 md:pt-8 text-center">
             <motion.p
               variants={fadeInUp}
               className="text-xs sm:text-sm text-slate-400 font-medium tracking-widest uppercase"

@@ -20,16 +20,17 @@ interface MarketData {
   oil_breakdown: OilType[];
 }
 
+/* Mobile-first animation variants */
 const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
+  transition: { duration: 0.3 },
 };
 
 const staggerContainer = {
   animate: {
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.05,
       delayChildren: 0.1,
     },
   },
@@ -54,8 +55,8 @@ export default function MarketDemandChart() {
 
   if (loading) {
     return (
-      <div className="w-full h-96 flex items-center justify-center">
-        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2 }} className="text-4xl">
+      <div className="w-full h-64 sm:h-96 flex items-center justify-center">
+        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2 }} className="text-3xl sm:text-4xl">
           ⚙️
         </motion.div>
       </div>
@@ -88,8 +89,8 @@ export default function MarketDemandChart() {
 
   return (
     <motion.div variants={staggerContainer} initial="initial" animate="animate" className="w-full space-y-8">
-      {/* Key Metrics */}
-      <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Key Metrics - Mobile-first grid */}
+      <motion.div variants={fadeInUp} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
         {[
           { label: 'Total Imports', value: `${marketData.india_total_imports.volume_mt} MT`, icon: '📦', color: 'from-blue-500 to-cyan-500' },
           { label: 'Market Value', value: `$${marketData.india_total_imports.value_billion_usd}B`, icon: '💎', color: 'from-emerald-500 to-teal-500' },
@@ -98,8 +99,8 @@ export default function MarketDemandChart() {
         ].map((metric, idx) => (
           <motion.div
             key={idx}
-            whileHover={{ y: -4, boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-            className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${metric.color} p-6 text-white shadow-xl group`}
+            whileHover={{ y: -2 }}
+            className={`relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl bg-gradient-to-br ${metric.color} p-3 sm:p-4 md:p-6 text-white shadow-lg sm:shadow-xl group min-h-[120px] sm:min-h-[140px]`}
           >
             {/* Animated background glow */}
             <motion.div
@@ -108,10 +109,12 @@ export default function MarketDemandChart() {
               transition={{ repeat: Infinity, duration: 3 }}
             />
 
-            <div className="relative z-10">
-              <div className="text-4xl mb-2">{metric.icon}</div>
-              <div className="text-xs font-bold tracking-widest uppercase opacity-80 mb-1">{metric.label}</div>
-              <div className="text-2xl font-black">{metric.value}</div>
+            <div className="relative z-10 flex flex-col justify-between h-full">
+              <div className="text-2xl sm:text-3xl md:text-4xl mb-1 sm:mb-2">{metric.icon}</div>
+              <div>
+                <div className="text-xs font-bold tracking-widest uppercase opacity-80 mb-1">{metric.label}</div>
+                <div className="text-lg sm:text-xl md:text-2xl font-black line-clamp-2">{metric.value}</div>
+              </div>
             </div>
           </motion.div>
         ))}
@@ -120,14 +123,14 @@ export default function MarketDemandChart() {
       {/* Main Charts Section */}
       <motion.div
         variants={fadeInUp}
-        className="rounded-2xl bg-white/60 backdrop-blur border border-white/40 shadow-2xl p-8 overflow-hidden"
+        className="rounded-lg sm:rounded-xl md:rounded-2xl bg-white/60 backdrop-blur border border-white/40 shadow-xl md:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 overflow-hidden"
       >
-        <h3 className="text-2xl font-black text-slate-900 mb-8">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 mb-4 sm:mb-6 md:mb-8">
           India's Edible Oil Imports by Type (16 MT Total)
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           <motion.div variants={fadeInUp} className="flex flex-col items-center justify-center">
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
                   data={pieData}
@@ -155,19 +158,19 @@ export default function MarketDemandChart() {
               </PieChart>
             </ResponsiveContainer>
           </motion.div>
-          <motion.div variants={fadeInUp} className="space-y-4">
+          <motion.div variants={fadeInUp} className="space-y-2 sm:space-y-3">
             {pieData.map((item, idx) => (
               <motion.div
                 key={idx}
-                whileHover={{ x: 8 }}
-                className="flex items-center justify-between p-4 bg-gradient-to-r hover:from-blue-50 hover:to-emerald-50 rounded-xl border border-slate-100 hover:border-slate-200 transition-all"
+                whileHover={{ x: 4 }}
+                className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r hover:from-blue-50 hover:to-emerald-50 rounded-lg sm:rounded-xl border border-slate-100 hover:border-slate-200 transition-all"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-4 h-4 rounded" style={{ backgroundColor: item.color }}></div>
-                  <span className="font-semibold text-slate-900">{item.name}</span>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 rounded flex-shrink-0" style={{ backgroundColor: item.color }}></div>
+                  <span className="font-semibold text-slate-900 text-sm sm:text-base">{item.name}</span>
                 </div>
-                <div className="text-right">
-                  <div className="font-black text-slate-900">{item.value.toFixed(2)} MT</div>
+                <div className="text-right flex-shrink-0">
+                  <div className="font-black text-slate-900 text-sm sm:text-base">{item.value.toFixed(1)} MT</div>
                   <div className="text-xs text-slate-500 font-semibold">
                     {((item.value / marketData.india_total_imports.volume_mt) * 100).toFixed(0)}%
                   </div>
@@ -179,11 +182,11 @@ export default function MarketDemandChart() {
       </motion.div>
 
       {/* Soybean Suppliers */}
-      <motion.div variants={fadeInUp} className="rounded-2xl bg-white/60 backdrop-blur border border-white/40 shadow-2xl p-8">
-        <h3 className="text-2xl font-black text-slate-900 mb-8">Soybean Oil Suppliers to India (5.47 MT)</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <motion.div variants={fadeInUp} className="rounded-lg sm:rounded-xl md:rounded-2xl bg-white/60 backdrop-blur border border-white/40 shadow-xl md:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 mb-4 sm:mb-6 md:mb-8">Soybean Oil Suppliers to India (5.47 MT)</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           <motion.div variants={fadeInUp}>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <BarChart data={soybeanSuppliers}>
                 <defs>
                   <linearGradient id="soybeanGradient" x1="0" y1="0" x2="0" y2="1">
@@ -211,23 +214,23 @@ export default function MarketDemandChart() {
               </BarChart>
             </ResponsiveContainer>
           </motion.div>
-          <motion.div variants={fadeInUp} className="space-y-4">
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg mb-4">
-              <p className="text-sm text-slate-700 font-medium leading-relaxed">
+          <motion.div variants={fadeInUp} className="space-y-2 sm:space-y-3">
+            <div className="bg-blue-50 border-l-4 border-blue-500 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4">
+              <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
                 <strong>Market Opportunity:</strong> Argentina dominates with 53% but growing demand (+36% YoY) creates entry points for reliable suppliers like Tanzania.
               </p>
             </div>
             {soybeanSuppliers.map((supplier, idx) => (
               <motion.div
                 key={idx}
-                whileHover={{ x: 8 }}
-                className="flex items-center justify-between p-4 bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl border border-slate-100 hover:border-slate-200 transition-all"
+                whileHover={{ x: 4 }}
+                className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-lg sm:rounded-xl border border-slate-100 hover:border-slate-200 transition-all"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: supplier.color }}></div>
-                  <span className="font-semibold text-slate-900">{supplier.name}</span>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full flex-shrink-0" style={{ backgroundColor: supplier.color }}></div>
+                  <span className="font-semibold text-slate-900 text-sm sm:text-base">{supplier.name}</span>
                 </div>
-                <div className="font-black text-slate-900">{supplier.value}%</div>
+                <div className="font-black text-slate-900 text-sm sm:text-base">{supplier.value}%</div>
               </motion.div>
             ))}
           </motion.div>
@@ -235,11 +238,11 @@ export default function MarketDemandChart() {
       </motion.div>
 
       {/* Sunflower Suppliers */}
-      <motion.div variants={fadeInUp} className="rounded-2xl bg-white/60 backdrop-blur border border-white/40 shadow-2xl p-8">
-        <h3 className="text-2xl font-black text-slate-900 mb-8">Sunflower Oil Suppliers to India (3.25 MT)</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <motion.div variants={fadeInUp} className="rounded-lg sm:rounded-xl md:rounded-2xl bg-white/60 backdrop-blur border border-white/40 shadow-xl md:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 mb-4 sm:mb-6 md:mb-8">Sunflower Oil Suppliers to India (3.25 MT)</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           <motion.div variants={fadeInUp}>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={250}>
               <BarChart data={sunflowerSuppliers}>
                 <defs>
                   <linearGradient id="sunflowerGradient" x1="0" y1="0" x2="0" y2="1">
@@ -267,23 +270,23 @@ export default function MarketDemandChart() {
               </BarChart>
             </ResponsiveContainer>
           </motion.div>
-          <motion.div variants={fadeInUp} className="space-y-4">
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg mb-4">
-              <p className="text-sm text-slate-700 font-medium leading-relaxed">
+          <motion.div variants={fadeInUp} className="space-y-2 sm:space-y-3">
+            <div className="bg-red-50 border-l-4 border-red-500 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4">
+              <p className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
                 <strong>Geopolitical Vulnerability:</strong> Russia dominates (55-60%) post-Ukraine war. Non-Black Sea suppliers like Tanzania have significant opportunity.
               </p>
             </div>
             {sunflowerSuppliers.map((supplier, idx) => (
               <motion.div
                 key={idx}
-                whileHover={{ x: 8 }}
-                className="flex items-center justify-between p-4 bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-xl border border-slate-100 hover:border-slate-200 transition-all"
+                whileHover={{ x: 4 }}
+                className="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-lg sm:rounded-xl border border-slate-100 hover:border-slate-200 transition-all"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: supplier.color }}></div>
-                  <span className="font-semibold text-slate-900">{supplier.name}</span>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full flex-shrink-0" style={{ backgroundColor: supplier.color }}></div>
+                  <span className="font-semibold text-slate-900 text-sm sm:text-base">{supplier.name}</span>
                 </div>
-                <div className="font-black text-slate-900">{supplier.value}%</div>
+                <div className="font-black text-slate-900 text-sm sm:text-base">{supplier.value}%</div>
               </motion.div>
             ))}
           </motion.div>
