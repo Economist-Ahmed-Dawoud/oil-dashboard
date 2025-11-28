@@ -259,12 +259,16 @@ export default function SupplyChainMap() {
               const isSelected = selectedFlow === flow.id;
 
               // Determine badge color based on trade agreement
-              const getBadgeColor = (agreement: string) => {
+              const getBadgeColor = (agreement?: string) => {
+                if (!agreement) return 'from-gray-400 to-slate-500';
                 if (agreement.includes('DFTP')) return 'from-emerald-400 to-green-500';
                 if (agreement.includes('SADC')) return 'from-blue-400 to-cyan-500';
                 if (agreement.includes('EAC')) return 'from-purple-400 to-pink-500';
                 return 'from-gray-400 to-slate-500';
               };
+
+              // Skip rendering if location references are missing
+              if (!fromLocation || !toLocation) return null;
 
               return (
                 <motion.div
