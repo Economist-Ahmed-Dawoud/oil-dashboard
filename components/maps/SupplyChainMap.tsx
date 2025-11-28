@@ -232,72 +232,197 @@ export default function SupplyChainMap() {
         </motion.div>
       </motion.div>
 
-      {/* Supply Flows Detail */}
-      <motion.div variants={fadeInUp} className="bg-white/60 backdrop-blur rounded-lg sm:rounded-xl md:rounded-2xl shadow-lg md:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 border border-white/60">
-        <h3 className="text-lg sm:text-xl md:text-2xl font-black bg-gradient-to-r from-blue-700 to-cyan-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6">📊 Supply Chain Flows</h3>
-        <motion.div className="space-y-2 sm:space-y-3 md:space-y-4" variants={staggerContainer} initial="initial" animate="animate">
-          {data.supply_flows.map((flow, idx) => (
-            <motion.div
-              key={flow.id}
-              variants={fadeInUp}
-              whileHover={{ y: -1 }}
-              className={`p-3 sm:p-4 md:p-5 rounded-lg sm:rounded-xl border-l-4 cursor-pointer transition-all backdrop-blur ${
-                selectedFlow === flow.id
-                  ? 'bg-blue-100/60 border-blue-500 shadow-lg'
-                  : 'bg-white/40 border-white/60 hover:bg-white/50 hover:shadow-md'
-              }`}
-              onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
+      {/* Supply Flows - Interactive Visual Flows */}
+      <motion.div variants={fadeInUp} className="bg-gradient-to-br from-blue-50/80 via-cyan-50/80 to-sky-50/80 backdrop-blur rounded-lg sm:rounded-xl md:rounded-2xl shadow-lg md:shadow-2xl p-3 sm:p-4 md:p-6 lg:p-8 border border-blue-200/60 overflow-hidden">
+        {/* Decorative background elements */}
+        <motion.div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="absolute top-0 right-0 w-72 h-72 bg-blue-200 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-200 rounded-full blur-3xl" />
+        </motion.div>
+
+        <div className="relative z-10">
+          <h3 className="text-lg sm:text-xl md:text-2xl font-black bg-gradient-to-r from-blue-700 to-cyan-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 flex items-center gap-2">
+            <span>🔄 Supply Chain Flows</span>
+            <motion.span
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 8, ease: 'linear' }}
+              className="text-lg"
             >
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
-                <div>
-                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">FROM</div>
-                  <div className="font-bold text-slate-900 text-sm sm:text-base mt-1">
-                    {data.locations.find((l) => l.id === flow.from)?.name}
-                  </div>
-                </div>
-                <div className="flex items-center justify-center">
-                  <div className="text-xl sm:text-2xl font-bold text-gray-400">→</div>
-                </div>
-                <div>
-                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">TO</div>
-                  <div className="font-bold text-slate-900 text-sm sm:text-base mt-1">
-                    {data.locations.find((l) => l.id === flow.to)?.name}
-                  </div>
-                </div>
-              </div>
+              ↻
+            </motion.span>
+          </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
-                <div className="bg-white/60 backdrop-blur rounded-lg p-2 sm:p-3 border border-white/60">
-                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">Commodity</div>
-                  <div className="font-semibold text-slate-900 text-xs sm:text-sm mt-1">{flow.commodity}</div>
-                </div>
-                <div className="bg-white/60 backdrop-blur rounded-lg p-2 sm:p-3 border border-white/60">
-                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">Volume</div>
-                  <div className="font-semibold text-slate-900 text-xs sm:text-sm mt-1">
-                    {flow.annual_volume_tons ? `${(flow.annual_volume_tons / 1000).toFixed(0)}K tons` : `${flow.volume_percent_of_facility}% capacity`}
-                  </div>
-                </div>
-                <div className="bg-white/60 backdrop-blur rounded-lg p-2 sm:p-3 border border-white/60">
-                  <div className="text-xs text-gray-700 font-bold uppercase tracking-wide">Trade Agreement</div>
-                  <div className="font-bold text-emerald-600 text-xs sm:text-sm mt-1">{flow.trade_agreement}</div>
-                </div>
-              </div>
+          <motion.div className="space-y-2 sm:space-y-3 md:space-y-4" variants={staggerContainer} initial="initial" animate="animate">
+            {data.supply_flows.map((flow, idx) => {
+              const fromLocation = data.locations.find((l) => l.id === flow.from);
+              const toLocation = data.locations.find((l) => l.id === flow.to);
+              const isSelected = selectedFlow === flow.id;
 
-              {selectedFlow === flow.id && (
+              // Determine badge color based on trade agreement
+              const getBadgeColor = (agreement: string) => {
+                if (agreement.includes('DFTP')) return 'from-emerald-400 to-green-500';
+                if (agreement.includes('SADC')) return 'from-blue-400 to-cyan-500';
+                if (agreement.includes('EAC')) return 'from-purple-400 to-pink-500';
+                return 'from-gray-400 to-slate-500';
+              };
+
+              return (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="mt-4 pt-4 border-t border-white/40 space-y-2"
+                  key={flow.id}
+                  variants={fadeInUp}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  onClick={() => setSelectedFlow(selectedFlow === flow.id ? null : flow.id)}
+                  className={`relative overflow-hidden rounded-lg sm:rounded-xl border cursor-pointer transition-all backdrop-blur group ${
+                    isSelected
+                      ? 'bg-gradient-to-br from-blue-100/80 to-cyan-100/80 border-cyan-400 shadow-xl'
+                      : 'bg-white/50 border-white/60 hover:bg-white/70 hover:border-blue-300/80 shadow-md hover:shadow-lg'
+                  }`}
                 >
-                  <div>
-                    <div className="text-sm text-gray-700 font-bold uppercase tracking-wide">Route</div>
-                    <div className="text-gray-700 mt-1">{flow.route}</div>
+                  {/* Animated gradient border */}
+                  {isSelected && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-cyan-400/20 to-blue-400/0 opacity-50"
+                      animate={{ x: ['-100%', '100%'] }}
+                      transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
+                    />
+                  )}
+
+                  <div className="relative z-10 p-3 sm:p-4 md:p-5">
+                    {/* Header: FROM → TO with animated arrow */}
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-3 md:gap-2 mb-3 sm:mb-4 items-center">
+                      {/* From Location */}
+                      <div className="md:col-span-2">
+                        <div className="text-xs text-gray-600 font-bold uppercase tracking-wider opacity-75">FROM</div>
+                        <div className="font-bold text-slate-900 text-sm sm:text-base mt-1 flex items-center gap-2">
+                          <span className="text-lg">{fromLocation?.icon}</span>
+                          {fromLocation?.name}
+                        </div>
+                      </div>
+
+                      {/* Animated Arrow */}
+                      <div className="hidden md:flex items-center justify-center">
+                        <motion.div
+                          animate={{ x: [0, 6, 0] }}
+                          transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+                          className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent"
+                        >
+                          →
+                        </motion.div>
+                      </div>
+
+                      {/* To Location */}
+                      <div className="md:col-span-2">
+                        <div className="text-xs text-gray-600 font-bold uppercase tracking-wider opacity-75">TO</div>
+                        <div className="font-bold text-slate-900 text-sm sm:text-base mt-1 flex items-center gap-2">
+                          <span className="text-lg">{toLocation?.icon}</span>
+                          {toLocation?.name}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Metrics Grid - Mobile Arrow Version */}
+                    <div className="md:hidden mb-3">
+                      <motion.div
+                        animate={{ y: [0, 4, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+                        className="text-xl font-bold text-blue-400 text-center"
+                      >
+                        ↓
+                      </motion.div>
+                    </div>
+
+                    {/* Stats Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4">
+                      {/* Commodity Card */}
+                      <motion.div
+                        whileHover={{ y: -2 }}
+                        className="bg-gradient-to-br from-white/80 to-blue-50/80 backdrop-blur rounded-lg p-2 sm:p-3 border border-blue-200/60 shadow-sm"
+                      >
+                        <div className="text-xs text-blue-700 font-bold uppercase tracking-wide">📦 Commodity</div>
+                        <div className="font-bold text-slate-900 text-sm mt-1 flex items-center gap-1">
+                          {flow.commodity === 'Soybean' ? '🫘' : '🌻'} {flow.commodity}
+                        </div>
+                      </motion.div>
+
+                      {/* Volume Card with Visual Bar */}
+                      <motion.div
+                        whileHover={{ y: -2 }}
+                        className="bg-gradient-to-br from-white/80 to-cyan-50/80 backdrop-blur rounded-lg p-2 sm:p-3 border border-cyan-200/60 shadow-sm"
+                      >
+                        <div className="text-xs text-cyan-700 font-bold uppercase tracking-wide">📊 Volume</div>
+                        <div className="font-bold text-slate-900 text-sm mt-1">
+                          {flow.annual_volume_tons ? `${(flow.annual_volume_tons / 1000).toFixed(0)}K tons` : `${flow.volume_percent_of_facility}%`}
+                        </div>
+                        {/* Volume visualization bar */}
+                        <motion.div
+                          className="w-full h-1.5 bg-gradient-to-r from-cyan-300 to-blue-400 rounded-full mt-2 overflow-hidden"
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ delay: 0.3 + idx * 0.1, duration: 0.8 }}
+                        />
+                      </motion.div>
+
+                      {/* Trade Agreement Badge */}
+                      <motion.div
+                        whileHover={{ y: -2 }}
+                        className="bg-gradient-to-br from-white/80 to-emerald-50/80 backdrop-blur rounded-lg p-2 sm:p-3 border border-emerald-200/60 shadow-sm"
+                      >
+                        <div className="text-xs text-emerald-700 font-bold uppercase tracking-wide">🤝 Agreement</div>
+                        <motion.div
+                          className={`inline-block mt-1 px-2 py-1 rounded-full text-xs font-bold text-white bg-gradient-to-r ${getBadgeColor(flow.trade_agreement)} shadow-md`}
+                          whileHover={{ scale: 1.1 }}
+                        >
+                          {flow.trade_agreement}
+                        </motion.div>
+                      </motion.div>
+                    </div>
+
+                    {/* Expandable Route Details */}
+                    <AnimatePresence>
+                      {isSelected && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-blue-200/60 space-y-2 sm:space-y-3"
+                        >
+                          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
+                            <div className="text-xs text-blue-700 font-bold uppercase tracking-wide mb-1">🗺️ Detailed Route</div>
+                            <div className="bg-gradient-to-br from-blue-50/80 to-cyan-50/80 rounded-lg p-2 sm:p-3 border border-blue-200/40 text-gray-700 text-xs sm:text-sm leading-relaxed">
+                              {flow.route}
+                            </div>
+                          </motion.div>
+
+                          {/* Additional Flow Stats */}
+                          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="grid grid-cols-2 gap-2 sm:gap-3">
+                            <div className="bg-white/60 rounded-lg p-2 border border-blue-200/40">
+                              <div className="text-xs text-gray-600 font-bold">Tariff Status</div>
+                              <div className="font-semibold text-emerald-600 text-sm mt-1">0% Duty ✓</div>
+                            </div>
+                            <div className="bg-white/60 rounded-lg p-2 border border-blue-200/40">
+                              <div className="text-xs text-gray-600 font-bold">Flow Type</div>
+                              <div className="font-semibold text-blue-600 text-sm mt-1">{flow.commodity}</div>
+                            </div>
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Expand/Collapse Indicator */}
+                    <motion.div
+                      className="flex justify-center mt-2 text-gray-400"
+                      animate={{ rotate: isSelected ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <span className="text-xs">▼</span>
+                    </motion.div>
                   </div>
                 </motion.div>
-              )}
-            </motion.div>
-          ))}
-        </motion.div>
+              );
+            })}
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* Supply Security Summary */}
