@@ -267,9 +267,11 @@ select {
 }
 
 /* ========== CHART STYLING ========== */
-/* Make pie chart labels white and readable */
-.recharts-text {
-  fill: #ffffff;
-  font-weight: bold;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+/* Make tooltip text white and readable */
+.recharts-tooltip-wrapper .recharts-tooltip-item {
+  color: #ffffff;
+}
+
+.recharts-tooltip-label {
+  color: #ffffff;
 }

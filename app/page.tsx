@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import MarketDemandChart from '@/components/charts/MarketDemandChart';
 import StrategyComparison from '@/components/charts/StrategyComparison';
 import RiskHeatmap from '@/components/charts/RiskHeatmap';
+import PDFDownloadButton from '@/components/PDFDownloadButton';
 import dynamic from 'next/dynamic';
 
 const SupplyChainMap = dynamic(() => import('@/components/maps/SupplyChainMap'), { ssr: false });
@@ -30,11 +31,6 @@ const staggerContainer = {
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('overview');
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
 
   const sections = [
     { id: 'overview', label: 'Executive Summary', abbreviation: 'Summary', icon: '📊' },
@@ -54,8 +50,8 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4 md:py-5 lg:py-6">
           <motion.div className="space-y-4" variants={staggerContainer} initial="initial" animate="animate">
-            <motion.div variants={fadeInUp}>
-              <div className="flex items-center gap-2 sm:gap-3">
+            <motion.div variants={fadeInUp} className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
                 <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 flex items-center justify-center flex-shrink-0">
                   <span className="text-white text-base sm:text-lg font-bold">📊</span>
                 </div>
@@ -63,6 +59,9 @@ export default function Home() {
                   Oilseed Investment
                 </h1>
               </div>
+              <motion.div variants={fadeInUp} className="flex-shrink-0">
+                <PDFDownloadButton />
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
