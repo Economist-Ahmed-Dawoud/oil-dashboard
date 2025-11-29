@@ -24,7 +24,7 @@ interface MarketData {
 const fadeInUp = {
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.3 },
+  transition: { duration: 0.5, ease: 'easeOut' },
 };
 
 const staggerContainer = {
@@ -141,6 +141,7 @@ export default function MarketDemandChart() {
                   paddingAngle={2}
                   dataKey="value"
                   label={({ name, value }) => `${name}: ${value.toFixed(2)}MT`}
+                  labelLine={{ stroke: '#ffffff', strokeWidth: 1 }}
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />

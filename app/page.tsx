@@ -14,8 +14,8 @@ const fadeInUp = {
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
   transition: {
-    duration: 0.3,
-    ease: [0.43, 0.13, 0.23, 0.96]
+    duration: 0.5,
+    ease: 'easeOut'
   },
 };
 
@@ -118,9 +118,9 @@ export default function Home() {
         {activeSection === 'overview' && (
           <motion.div
             key="overview"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
             className="space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10"
           >
             {/* Hero Cards */}
@@ -334,9 +334,9 @@ export default function Home() {
         {activeSection === 'market' && (
           <motion.div
             key="market"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
             className="space-y-8"
           >
             <motion.h2
@@ -356,15 +356,15 @@ export default function Home() {
         {activeSection === 'strategies' && (
           <motion.div
             key="strategies"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
             className="space-y-8"
           >
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl font-black bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent mb-8"
+              className="text-4xl font-black bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent mb-4"
             >
               Investment Strategies
             </motion.h2>
@@ -378,9 +378,9 @@ export default function Home() {
         {activeSection === 'supply' && (
           <motion.div
             key="supply"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
             className="space-y-8"
           >
             <motion.h2
@@ -400,9 +400,9 @@ export default function Home() {
         {activeSection === 'risks' && (
           <motion.div
             key="risks"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
             className="space-y-8"
           >
             <motion.h2
