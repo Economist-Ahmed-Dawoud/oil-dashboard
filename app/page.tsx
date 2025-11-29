@@ -74,6 +74,7 @@ export default function Home() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
         className="sticky top-0 z-50 bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-lg"
+        aria-label="Main navigation"
       >
         <div className="max-w-7xl mx-auto px-0 sm:px-4 lg:px-8">
           <div className="flex overflow-x-auto gap-1.5 sm:gap-2 py-2 sm:py-3 px-3 sm:px-0 scrollbar-hide scroll-smooth">
@@ -84,6 +85,8 @@ export default function Home() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.05 * idx }}
                 onClick={() => setActiveSection(section.id)}
+                aria-label={section.label}
+                aria-current={activeSection === section.id ? 'page' : undefined}
                 className={`relative px-3 sm:px-5 md:px-6 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold whitespace-nowrap text-xs sm:text-sm md:text-base min-h-[44px] flex items-center justify-center transition-all duration-200 flex-shrink-0 touch-target ${
                   activeSection === section.id
                     ? 'text-white shadow-2xl'
@@ -95,11 +98,12 @@ export default function Home() {
                     layoutId="activeNav"
                     className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-600 rounded-lg sm:rounded-xl -z-10"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    aria-hidden="true"
                   />
                 )}
                 {/* Mobile: abbreviation, Tablet+: full label */}
-                <span className="hidden sm:inline">{section.icon} {section.label}</span>
-                <span className="sm:hidden flex items-center gap-1">
+                <span className="hidden sm:inline" aria-hidden="false">{section.icon} {section.label}</span>
+                <span className="sm:hidden flex items-center gap-1" aria-hidden="false">
                   {section.icon} <span className="text-xs font-bold">{section.abbreviation}</span>
                 </span>
               </motion.button>

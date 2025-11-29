@@ -60,6 +60,7 @@ export default function StrategyComparison() {
   const [data, setData] = useState<StrategiesData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedStrategy, setSelectedStrategy] = useState<string>('compare');
+  const [comparisonLayout, setComparisonLayout] = useState<'table' | 'cards'>('table');
 
   useEffect(() => {
     fetch('/data/strategiesData.json')
@@ -111,7 +112,7 @@ export default function StrategyComparison() {
   return (
     <div className="w-full space-y-8">
       {/* Strategy Selector */}
-      <motion.div className="flex gap-4 flex-wrap" variants={staggerContainer} initial="initial" animate="animate">
+      <motion.div className="flex gap-4 flex-wrap" variants={staggerContainer} initial="initial" animate="animate" role="group" aria-label="Strategy selection">
         {[
           { key: 'compare', label: 'Compare Both', color: 'from-emerald-500 to-teal-600' },
           { key: 'tanzania', label: 'Tanzania Only', color: 'from-green-500 to-emerald-600' },
@@ -123,6 +124,8 @@ export default function StrategyComparison() {
             onClick={() => setSelectedStrategy(btn.key)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
+            aria-pressed={selectedStrategy === btn.key}
+            aria-label={btn.label}
             className={`px-8 py-3 rounded-xl font-semibold transition-all border ${
               selectedStrategy === btn.key
                 ? `bg-gradient-to-r ${btn.color} text-white shadow-lg border-transparent`
@@ -329,7 +332,7 @@ export default function StrategyComparison() {
         )}
       </AnimatePresence>
 
-      {/* Detailed Comparison Table */}
+      {/* Detailed Comparison Table/Cards */}
       <AnimatePresence>
         {selectedStrategy === 'compare' && (
           <motion.div
@@ -340,35 +343,120 @@ export default function StrategyComparison() {
             transition={{ duration: 0.5 }}
             className="bg-white/60 backdrop-blur rounded-2xl shadow-2xl overflow-hidden border border-white/60"
           >
+            {/* Header with Layout Toggle */}
             <div className="p-6 border-b border-white/60 bg-gradient-to-r from-slate-50/80 to-blue-50/80">
-              <h3 className="text-2xl font-black bg-gradient-to-r from-slate-900 to-blue-700 bg-clip-text text-transparent">Head-to-Head Comparison</h3>
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <h3 className="text-2xl font-black bg-gradient-to-r from-slate-900 to-blue-700 bg-clip-text text-transparent">Head-to-Head Comparison</h3>
+                <motion.div className="flex gap-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} role="group" aria-label="Comparison layout toggle">
+                  <motion.button
+                    onClick={() => setComparisonLayout('table')}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-pressed={comparisonLayout === 'table'}
+                    aria-label="Table view"
+                    className={`px-4 py-2 rounded-lg font-semibold transition-all border ${
+                      comparisonLayout === 'table'
+                        ? 'bg-gradient-to-r from-slate-600 to-slate-700 text-white shadow-lg border-transparent'
+                        : 'bg-white/40 text-slate-700 border-white/60 hover:border-white/80'
+                    }`}
+                  >
+                    📊 Table
+                  </motion.button>
+                  <motion.button
+                    onClick={() => setComparisonLayout('cards')}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-pressed={comparisonLayout === 'cards'}
+                    aria-label="Card view"
+                    className={`px-4 py-2 rounded-lg font-semibold transition-all border ${
+                      comparisonLayout === 'cards'
+                        ? 'bg-gradient-to-r from-slate-600 to-slate-700 text-white shadow-lg border-transparent'
+                        : 'bg-white/40 text-slate-700 border-white/60 hover:border-white/80'
+                    }`}
+                  >
+                    🎴 Cards
+                  </motion.button>
+                </motion.div>
+              </div>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-white/40 border-b border-white/60">
-                    <th className="text-left p-4 font-bold text-slate-700">Factor</th>
-                    <th className="text-center p-4 font-bold text-emerald-600">Tanzania</th>
-                    <th className="text-center p-4 font-bold text-blue-600">Kazakhstan</th>
-                    <th className="text-center p-4 font-bold text-orange-600">Winner</th>
-                  </tr>
-                </thead>
-                <tbody>
+
+            {/* Table View */}
+            <AnimatePresence>
+              {comparisonLayout === 'table' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-x-auto"
+                >
+                  <table className="w-full">
+                    <thead>
+                      <tr className="bg-white/40 border-b border-white/60">
+                        <th className="text-left p-4 font-bold text-slate-700">Factor</th>
+                        <th className="text-center p-4 font-bold text-emerald-600">Tanzania</th>
+                        <th className="text-center p-4 font-bold text-blue-600">Kazakhstan</th>
+                        <th className="text-center p-4 font-bold text-orange-600">Winner</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.comparison_key_factors.map((factor, idx) => (
+                        <motion.tr
+                          key={idx}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.05 }}
+                          className={`border-b border-white/40 hover:bg-white/20 transition-colors ${idx % 2 === 0 ? 'bg-white/20' : 'bg-white/10'}`}
+                        >
+                          <td className="p-4 font-medium text-slate-700">{factor.factor}</td>
+                          <td className="text-center p-4 text-emerald-600 font-semibold">{factor.tanzania}</td>
+                          <td className="text-center p-4 text-blue-600 font-semibold">{factor.kazakhstan}</td>
+                          <td className="text-center p-4">
+                            <motion.span
+                              whileHover={{ scale: 1.1 }}
+                              className={`inline-block px-3 py-1 rounded-full text-xs font-bold backdrop-blur ${
+                                factor.winner === 'Tanzania'
+                                  ? 'bg-emerald-200/60 text-emerald-700'
+                                  : factor.winner === 'Kazakhstan'
+                                    ? 'bg-blue-200/60 text-blue-700'
+                                    : 'bg-gray-200/60 text-gray-700'
+                              }`}
+                            >
+                              {factor.winner}
+                            </motion.span>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Card View */}
+            <AnimatePresence>
+              {comparisonLayout === 'cards' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="p-6 space-y-4"
+                >
                   {data.comparison_key_factors.map((factor, idx) => (
-                    <motion.tr
+                    <motion.div
                       key={idx}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className={`border-b border-white/40 hover:bg-white/20 transition-colors ${idx % 2 === 0 ? 'bg-white/20' : 'bg-white/10'}`}
+                      whileHover={{ y: -2 }}
+                      className="bg-white/40 backdrop-blur rounded-xl p-6 border border-white/60 hover:border-white/80 shadow-sm transition-all"
                     >
-                      <td className="p-4 font-medium text-slate-700">{factor.factor}</td>
-                      <td className="text-center p-4 text-emerald-600 font-semibold">{factor.tanzania}</td>
-                      <td className="text-center p-4 text-blue-600 font-semibold">{factor.kazakhstan}</td>
-                      <td className="text-center p-4">
+                      <div className="flex items-start justify-between gap-4 mb-4">
+                        <h4 className="font-bold text-slate-900 text-lg flex-1">{factor.factor}</h4>
                         <motion.span
                           whileHover={{ scale: 1.1 }}
-                          className={`inline-block px-3 py-1 rounded-full text-xs font-bold backdrop-blur ${
+                          className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur flex-shrink-0 ${
                             factor.winner === 'Tanzania'
                               ? 'bg-emerald-200/60 text-emerald-700'
                               : factor.winner === 'Kazakhstan'
@@ -376,14 +464,24 @@ export default function StrategyComparison() {
                                 : 'bg-gray-200/60 text-gray-700'
                           }`}
                         >
-                          {factor.winner}
+                          {factor.winner} Wins
                         </motion.span>
-                      </td>
-                    </motion.tr>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-emerald-50/60 rounded-lg p-4 border border-emerald-200/60">
+                          <div className="text-xs font-bold text-emerald-700 uppercase tracking-wide mb-2">Tanzania</div>
+                          <div className="text-sm font-semibold text-emerald-900">{factor.tanzania}</div>
+                        </div>
+                        <div className="bg-blue-50/60 rounded-lg p-4 border border-blue-200/60">
+                          <div className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-2">Kazakhstan</div>
+                          <div className="text-sm font-semibold text-blue-900">{factor.kazakhstan}</div>
+                        </div>
+                      </div>
+                    </motion.div>
                   ))}
-                </tbody>
-              </table>
-            </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
