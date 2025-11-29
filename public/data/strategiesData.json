@@ -24,23 +24,23 @@
         "supply_chain": 0.2
       },
       "financial": {
-        "payback_years": 2.75,
-        "irr_5yr_percent": 24,
-        "ebitda_margin": 11,
+        "payback_years": 3.3,
+        "irr_5yr_percent": 19,
+        "ebitda_margin": 9,
         "annual_revenue_million": 81.6
       },
       "tariff_and_logistics": {
-        "tariff_access": "0% DFTP",
-        "tariff_advantage": "Saves $420/ton vs 35% MFN",
+        "tariff_access": "8.25% DFTP (50% Margin of Preference)",
+        "tariff_advantage": "Saves $83/ton crude vs 16.5% MFN; $170/ton refined advantage",
         "logistics_days": 14,
         "logistics_cost_per_ton": 55,
         "customs_efficiency": "Direct port access"
       },
       "competitive_advantages": [
-        "Tariff arbitrage: 0% vs 35% (saves $420/ton)",
-        "Direct port access: 14 days vs 25-30 days",
-        "Regional sourcing: Duty-free SADC/EAC",
-        "Lower capex: $400-600K vs $500-800K (Central Asia)"
+        "Tariff advantage: 8.25% vs 16.5% crude (saves $83/ton) or vs 35.75% refined ($170/ton)",
+        "Direct port access: 14 days vs 25-30 days from Central Asia",
+        "Regional sourcing: Duty-free SADC/EAC integration (Uganda, Kenya, Zambia, Malawi)",
+        "Lower capex: $400-600K vs $500-800K (Central Asia alternatives)"
       ],
       "supply_sources": {
         "sunflower": {
@@ -95,11 +95,11 @@
         "annual_revenue_million": 127
       },
       "tariff_and_logistics": {
-        "tariff_access": "35% MFN duty",
-        "tariff_disadvantage": "$420/ton penalty vs Tanzania",
+        "tariff_access": "16.5% MFN duty (crude) / 35.75% (refined)",
+        "tariff_disadvantage": "$83/ton penalty vs Tanzania crude; $170/ton vs refined products",
         "logistics_days": 28,
         "logistics_cost_per_ton": 100,
-        "customs_efficiency": "Overland + sea (complex)"
+        "customs_efficiency": "Overland + sea (complex route via INSTC)"
       },
       "competitive_advantages": [
         "Massive integrated regional supply (Russia + Kazakhstan)",
@@ -140,20 +140,20 @@
     },
     {
       "factor": "Payback Period",
-      "tanzania": "2.75 years",
+      "tanzania": "3.3 years",
       "kazakhstan": "3.5 years",
       "winner": "Tanzania"
     },
     {
       "factor": "5-Year IRR",
-      "tanzania": "24%",
+      "tanzania": "19%",
       "kazakhstan": "16.5%",
       "winner": "Tanzania"
     },
     {
       "factor": "Tariff Advantage",
-      "tanzania": "0% DFTP",
-      "kazakhstan": "35% MFN",
+      "tanzania": "8.25% DFTP (50% MOP)",
+      "kazakhstan": "16.5% MFN (crude)",
       "winner": "Tanzania"
     },
     {
